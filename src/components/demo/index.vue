@@ -120,8 +120,12 @@ export default {
     .source-box {
         .source-box--main {
             overflow: hidden;
-            background-color: #f5f5f5;
+            background-color: #fafafa;
             transition: height .35s ease-in-out;
+
+            pre, code {
+                background: transparent;
+            }
         }
 
         .source-box--footer {

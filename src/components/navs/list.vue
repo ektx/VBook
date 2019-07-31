@@ -2,7 +2,7 @@
     <ul class="navs-com">
         <li v-for="nav in data" :key="nav.label">
             <div 
-                :class="['nav-header', {'active-link': nav.active}]" 
+                :class="['nav-header', {'active-link': nav.active}, {'is-link': !nav.children}]" 
                 @click="clickEvt(nav)"
             >
                 <i v-for="i in level" :key="i"/>
@@ -70,22 +70,30 @@ export default {
     font-size: 14px;
 
     .nav-header {
-        color: #333;
-        line-height: 2em;
-        cursor: pointer;
+        color: #aaa;
+        line-height: 2.5em;
         border-left: 3px solid transparent;
         background-color: transparent;
-        transition: 
-            color .35s ease-in-out;
+        pointer-events: none;
 
-        &.active-link {
-            border-left-color: #42b983;
-            background-color: #f1f1f1;
+        &.is-link {
+            color: #333;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: color .35s ease-in-out;
+       
+            &.active-link {
+                font-weight: bold;
+                color: #42b983;
+                border-left-color: #42b983;
+                background-color: #f1f1f1;
+            }
+
+            &:hover {
+                color: #42b983;
+            }
         }
 
-        &:hover {
-            color: #42b983;
-        }
 
         i {
             display: inline-block;
