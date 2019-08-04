@@ -14,22 +14,27 @@ export default [
         ]
     },
     {
-        label: 'Vue 组件',
+        label: '文档示例',
         children: [
             {
-                label: '文档示例',
+                label: '内部 Vue 组件',
                 children: [
                     {
-                        label: 'Layer',
-                        file: 'components/basic/layer'
+                        label: 'hello world',
+                        file: 'helloworld'
+                    }
+                ]
+            },
+            {
+                label: '外部 Vue 项目',
+                children: [
+                    {
+                        label: '与 Elemenu-UI 混合开发',
+                        file: 'development'
                     },
                     {
-                        label: 'Search 搜索2',
-                        file: 'components/basic/search'
-                    },
-                    {
-                        label: 'Search 搜索3',
-                        file: 'components/basic/search'
+                        label: '与 iview 混合开发',
+                        file: 'development'
                     }
                 ]
             }

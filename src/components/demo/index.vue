@@ -17,9 +17,22 @@ import Vue from 'vue'
 
 export default {
     name: 'demo-com',
+    props: {
+        xml: {
+            type: String,
+            default: ''
+        },
+        js: {
+            type: String,
+            default: ''
+        },
+        css: {
+            type: String,
+            default: ''
+        }
+    },
     data () {
         return {
-            temp: null,
             show: false,
             style: {
                 height: 0
@@ -42,6 +55,11 @@ export default {
             }
         }
     },
+    computed: {
+        html () {
+            return this.xml.replace(/&#123;/g, '{')
+        }
+    },
     mounted () {
         this.codeEl = this.$el.querySelector('.source-box--main')
         this.codeEl.addEventListener('transitionend', this.removeStyle)
@@ -56,6 +74,8 @@ export default {
 
             if (result) {
                 return Function(`return ${result.substr(15)}`)()
+            } else {
+                return {}
             }
         },
         // 获取样式内容
@@ -75,17 +95,11 @@ export default {
         },
 
         init () {
-            let code = this.codeEl.innerText
-            
-            if (!code) return
-
-            let template = this.stripTemplate(code)
-            let scripts = this.stripScript(code)
-            let style = this.stripStyle(code)
+            let { data } = this.stripScript( this.js )
 
             let Com = Vue.extend({
-                template,
-                data: scripts.data
+                template: this.stripTemplate( this.html ),
+                data
             })
 
             // https://cn.vuejs.org/v2/api/#vm-mount
@@ -93,7 +107,6 @@ export default {
             let component = new Com().$mount()
             // 挂载
             this.$el.querySelector('.display-box').appendChild(component.$el)
-            this.temp = code
         },
 
         removeStyle () {
@@ -141,6 +154,14 @@ export default {
             &:hover {
                 color: #09f;
             }
+        }
+
+        blockquote {
+            margin: 10px;
+            padding: 5px 10px;
+            background: #fff;
+            border-radius: 3px;
+            border: 1px solid #eee;
         }
     }
 }

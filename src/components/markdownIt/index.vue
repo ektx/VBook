@@ -4,7 +4,9 @@ import hljs from 'highlight.js'
 import mkItContainer from 'markdown-it-container'
 import mkItSub from 'markdown-it-sub'
 import mkItSup from 'markdown-it-sup'
+import mkItIns from 'markdown-it-ins'
 import mkItToc from '@/assets/js/md-toc.js'
+import mkItVue from '@/assets/js/md-vue.js'
 import demo from '../demo'
 
 export default {
@@ -34,17 +36,9 @@ export default {
                     md.utils.escapeHtml(str) + 
                     '</code></pre>'
             }
-        }).use(mkItContainer, 'demo', {
-            validate (params) {
-                return params.trim() === 'demo'
-            },
-            render (tokens, idx) {
-                if (tokens[idx].nesting === 1) {
-                    return `<demo>`
-                }
-                return `</demo>`
-            }
-        }).use(mkItContainer, 'warning', {
+        })
+        .use(mkItVue)
+        .use(mkItContainer, 'warning', {
             validate (params) {
                 return params.trim() === 'warning'
             },
@@ -54,7 +48,8 @@ export default {
                 }
                 return `</div>`
             }
-        }).use(mkItContainer, 'error', {
+        })
+        .use(mkItContainer, 'error', {
             validate (params) {
                 return params.trim() === 'error'
             },
@@ -64,11 +59,13 @@ export default {
                 }
                 return `</div>`
             }
-        }).use(mkItToc, {
+        })
+        .use(mkItToc, {
             anchorLinkSymbol: ''
         })
         .use(mkItSub)
         .use(mkItSup)
+        .use(mkItIns)
 
         return {
             md
@@ -97,6 +94,7 @@ export default {
         }
     },
     render (h) {
+        // console.log('html', this.HTML)
         return this.HTML()
     }
 }

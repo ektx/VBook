@@ -42,7 +42,6 @@ export default {
     },
     methods: {
         changeEvt (nav) {
-            console.log(nav.label)
             if ('file' in nav)
                 this.getFile(nav.file)
         },
@@ -52,8 +51,29 @@ export default {
                 url: `/doc/${file}.md`,
                 method: 'GET'
             }).then(res => {
-                this.inner = res.data
+                this.inner = this.safeStr( res.data )
             })
+        },
+
+        safeStr (str) {
+            let result = ''
+            let leftCode = '{'.charCodeAt(0)
+            
+            for (let i = 0, l = str.length; i < l;) {
+                if (
+                    str[i].charCodeAt(0) === leftCode &&
+                    str[i +1].charCodeAt(0) === leftCode &&
+                    str[i +2].charCodeAt(0) !== leftCode
+                ) {
+                    result += '&#123;&#123;'
+                    i += 2
+                } else {
+                    result += str[i]
+                    i++
+                }
+            }
+
+            return result
         }
     }
 };
