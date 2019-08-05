@@ -21,7 +21,7 @@ export default [
                 children: [
                     {
                         label: 'hello world',
-                        file: 'helloworld'
+                        file: 'help/helloworld'
                     }
                 ]
             },
@@ -30,11 +30,11 @@ export default [
                 children: [
                     {
                         label: '与 Elemenu-UI 混合开发',
-                        file: 'development'
+                        file: 'help/development'
                     },
                     {
                         label: '与 iview 混合开发',
-                        file: 'development'
+                        file: 'help/development'
                     }
                 ]
             }

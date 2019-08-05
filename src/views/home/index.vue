@@ -48,7 +48,7 @@ export default {
 
         getFile (file) {
             this.$axios({
-                url: `/doc/${file}.md`,
+                url: `/${file}.md`,
                 method: 'GET'
             }).then(res => {
                 this.inner = this.safeStr( res.data )

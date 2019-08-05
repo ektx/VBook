@@ -7,7 +7,7 @@
 ## 特性
 
 - 简单易用。markdown 语法支持与扩展，让你可以写出更好更快的文档与效果。
-- 易学易用。快速搭建自己的 Vue 组件或示例的文档。
+- 快速搭建自己的 Vue 组件或示例的文档。
 - 灵活的定制化，可以自己调整风格与主题。
 
 ## 使用
@@ -39,10 +39,8 @@ npm run serve
 
 ```
  your_project
+  ├─- doc      文档存放地址
   ├─- public   静态资源
-  |  ├─- doc   md 文档存放位置
-  |  ├─- ...   其它文件
-  |
   ├─- src      项目文档，如果需要定置，修改此处
   |  ├─- navs.js  菜单列表配制文件
   |  ├─- ...      其它文件
@@ -63,11 +61,11 @@ npm run serve
 ```js
 export default [
     {
-        label: '这是标题',
+        label: '使用指南',
         // 这是下级，与 file 只能保持一个
         children: [
             {
-                label: '标题',
+                label: '快速上手',
                 // file： markdown 在 doc 中的位置
                 file: 'help/welcome'
             }
