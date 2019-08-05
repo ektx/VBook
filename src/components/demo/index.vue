@@ -79,9 +79,20 @@ export default {
             }
         },
         // 获取样式内容
-        stripStyle (content) {
-            let result = content.match(/<(style)\s*>([\s\S]+)<\/\1>/)
-            return result && result[2] ? result[2].trim() : ''
+        setStyle () {
+            let cssInner = this.css.match(/<(style)\s*>([\s\S]+)<\/\1>/)
+            cssInner = cssInner && cssInner[2] ? 
+                cssInner[2].trim() : ''
+
+            let style = document.createElement('style')
+            this.$el.appendChild(style)
+
+            style.type = 'text/css'
+            style.appendChild(
+                document.createTextNode(cssInner)
+            )
+
+            // return result && result[2] ? result[2].trim() : ''
         },
         // 获取 template 内容
         stripTemplate(content) {
@@ -107,6 +118,8 @@ export default {
             let component = new Com().$mount()
             // 挂载
             this.$el.querySelector('.display-box').appendChild(component.$el)
+
+            this.setStyle()
         },
 
         removeStyle () {

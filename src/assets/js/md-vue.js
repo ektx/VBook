@@ -1,10 +1,10 @@
 export default function vue_plugin(md, name, options) {
 
     function render (tokens, idx, opts, env, self) {
-        console.log(tokens[idx])
         if (tokens[idx].nesting === 1) {
             tokens[idx].attrPush(['xml', tokens[idx].$template])
             tokens[idx].attrPush(['js', tokens[idx].$js])
+            tokens[idx].attrPush(['css', tokens[idx].$css])
 
             return self.renderToken(tokens, idx, opts, env, self) 
         } else {
@@ -32,6 +32,8 @@ export default function vue_plugin(md, name, options) {
         let temEnd = startLine
         let jsStart = startLine
         let jsEnd = startLine
+        let cssStart = startLine
+        let cssEnd = startLine
 
         for (;;) {
             nextLine++
@@ -74,6 +76,11 @@ export default function vue_plugin(md, name, options) {
                 case str === '</script>':
                     jsEnd = nextLine
                     break
+                case str.startsWith('<style'):
+                    cssStart = nextLine
+                    break
+                case str === '</style>':
+                    cssEnd = nextLine
             }
 
             // console.log(`start: ${start} max: ${max}`)
@@ -103,6 +110,10 @@ export default function vue_plugin(md, name, options) {
         token.$js = state.src.slice(
             state.bMarks[jsStart],
             state.bMarks[jsEnd +1]
+        )
+        token.$css = state.src.slice(
+            state.bMarks[cssStart],
+            state.bMarks[cssEnd +1]
         )
         token.map = [startLine, nextLine]
         token.info = 'demo'

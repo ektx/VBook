@@ -2,7 +2,7 @@
 
 ::: demo
 
-> 注意：目前不支持样式哟。
+> 注意：目前样式不支持预处理器哟！
 
 ```html
 <template>
@@ -22,7 +22,7 @@ export default {
 }
 </script>
 
-<style less="less">
+<style>
 .my-class {
     color: red;
 }

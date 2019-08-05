@@ -1,34 +1,35 @@
-.markdown-it-com {
-    h1, h2, h3, h4, h5, h6, strong {
+h1, h2, h3, h4, h5, h6, strong {
+    .markdown-it-com > & {
         margin-top: 1em;
         color: #273849;
         font-weight: 600;
     }
-
-    h1 {
+}
+.markdown-it-com {
+    & > h1 {
         margin-block-end: 15px;
         padding-block-end: 10px;
         font-size: 32px;
         border-bottom: 2px solid #ddd;
     }
-    h2 {
+    & > h2 {
         margin-block-end: 15px;
         padding-block-end: 8px;
         font-size: 28px;
         border-bottom: 1px solid #ddd;
     }
-    h3 {
+    & > h3 {
         font-size: 24px;
         margin-block-end: 10px;
     }
-    h4 {
+    & > h4 {
         font-size: 18px;
         margin-block-end: 10px;
     }
-    h5 {
+    & > h5 {
         font-size: 16px;
     }
-    h6 {
+    & > h6 {
         font-size: 14px;
     }
 
@@ -156,14 +157,14 @@
         background-color: #f5f5f5;
         border-radius: 4px;
 
-    code {
-        padding: 0;
-        font-size: inherit;
-        color: inherit;
-        white-space: pre-wrap;
-        background-color: transparent;
-        border-radius: 0;
-    }
+        code {
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+            white-space: pre-wrap;
+            background-color: transparent;
+            border-radius: 0;
+        }
     }
 
 }
