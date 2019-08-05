@@ -132,6 +132,7 @@ export default {
             padding: 60px 20px 20px;
             overflow: auto;
             box-sizing: border-box;
+            scroll-behavior: smooth;
         }
     }
 }
