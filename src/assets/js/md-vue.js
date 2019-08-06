@@ -5,6 +5,7 @@ export default function vue_plugin(md, name, options) {
             tokens[idx].attrPush(['xml', tokens[idx].$template])
             tokens[idx].attrPush(['js', tokens[idx].$js])
             tokens[idx].attrPush(['css', tokens[idx].$css])
+            tokens[idx].attrPush(['key', Date.now()])
 
             return self.renderToken(tokens, idx, opts, env, self) 
         } else {
