@@ -19,8 +19,7 @@ export default function vue_plugin(md, name, options) {
         let max = state.eMarks[startLine]
         let auto_closed = false
         
-
-        if (demoStr !== '::: demo') {
+        if (!demoStr.startsWith('::: demo')) {
             return false
         }
 
