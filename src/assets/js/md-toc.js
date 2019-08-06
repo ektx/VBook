@@ -213,6 +213,12 @@ export default function(md, options) {
           heading._tocAnchor = options.anchorLinkPrefix + heading._tocAnchor;
         }
 
+        // 修复 toc 生成的类似 <mark> 标签
+        // 在解析时没有结束标签报错的问题
+        if (content.includes('<')) {
+          content = content.replace(/</g, '&lt;')
+        }
+
         tocArray.push({
           content,
           anchor: heading._tocAnchor,

@@ -23,6 +23,8 @@ export default {
     data () {
         let md = new mkIt({
             linkify: true,
+            html: true,
+            typographer: true,
             highlight (str, lang) {
                 if (lang && hljs.getLanguage(lang)) {
                     try {
@@ -99,7 +101,3 @@ export default {
     }
 }
 </script>
-
-<style>
-
-</style>
