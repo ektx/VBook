@@ -86,7 +86,6 @@ export default {
                 font-weight: bold;
                 color: #42b983;
                 border-left-color: #42b983;
-                background-color: #f1f1f1;
             }
 
             &:hover {
