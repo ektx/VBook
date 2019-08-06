@@ -6,7 +6,7 @@
                 <slot/>
             </div>
             <div class="source-box--footer" @click="show = !show">
-                <span>查看代码</span>
+                <span>{{ show ? '收起' : '查看代码'}}</span>
             </div>
         </div>
     </div>
