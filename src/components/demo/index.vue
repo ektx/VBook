@@ -106,11 +106,12 @@ export default {
         },
 
         init () {
-            let { data } = this.stripScript( this.js )
+            let { data, methods } = this.stripScript( this.js )
 
             let Com = Vue.extend({
                 template: this.stripTemplate( this.html ),
-                data
+                data,
+                methods
             })
 
             // https://cn.vuejs.org/v2/api/#vm-mount
