@@ -159,12 +159,15 @@ export default {
         }
 
         .source-box--footer {
+            position: sticky;
+            bottom: -20px;
             margin-top: -1px;
             font-size: 12px;
             color: #666;
             line-height: 3em;
             text-align: center;
             border-top: 1px solid #ddd;
+            background-color: #fff;
             transition: color .3s ease-in-out;
             cursor: pointer;
 
