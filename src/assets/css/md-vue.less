@@ -7,7 +7,12 @@ h1, h2, h3, h4, h5, h6, strong {
 }
 .markdown-it-com {
     max-width: 900px;
-    margin: 0 auto;
+
+    @media screen {
+        @media (min-width: 1500px) {
+            margin: 0 auto;
+        }
+    }
 
     & > h1 {
         margin-block-end: 15px;
