@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import MarkdownIt from '@/components/markdownIt'
-import Navs from '@/components/navs'
-import navs from '@/navs.js'
+import MarkdownIt from '../../components/markdownIt'
+import Navs from '../../components/navs'
+import navs from '../../../../doc/list.js'
 
 export default {
     name: "home",
@@ -47,6 +47,8 @@ export default {
         },
 
         getFile (file) {
+            this.inner = ''
+            
             this.$axios({
                 url: `/${file}.md`,
                 method: 'GET'

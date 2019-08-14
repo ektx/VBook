@@ -5,8 +5,8 @@ import mkItContainer from 'markdown-it-container'
 import mkItSub from 'markdown-it-sub'
 import mkItSup from 'markdown-it-sup'
 import mkItIns from 'markdown-it-ins'
-import mkItToc from '@/assets/js/md-toc.js'
-import mkItVue from '@/assets/js/md-vue.js'
+import mkItToc from '../../assets/js/md-toc.js'
+import mkItVue from '../../assets/js/md-vue.js'
 import demo from '../demo'
 
 export default {

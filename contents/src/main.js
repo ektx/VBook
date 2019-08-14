@@ -3,7 +3,7 @@ import axios from 'axios'
 import App from './App.vue'
 import router from './router/'
 // markdown 效果
-import '@/assets/css/md-vue.less'
+import './assets/css/md-vue.less'
 import 'highlight.js/styles/vs.css'
 
 // 你在本示例中要使用的组件库

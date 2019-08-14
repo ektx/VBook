@@ -5,7 +5,7 @@
                 :class="['nav-header', {'active-link': nav.active}, {'is-link': !nav.children}]" 
                 @click="clickEvt(nav)"
             >
-                <i v-for="i in level" :key="i"/>
+                <i v-for="i in level" :key="i"></i>
                 {{nav.label}}
             </div>
             <div class="nav-children" v-if="nav.children">
