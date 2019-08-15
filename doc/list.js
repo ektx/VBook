@@ -1,4 +1,4 @@
-export default [
+[
     {
         label: '使用指南',
         file: 'help/welcome',

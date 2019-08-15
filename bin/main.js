@@ -10,13 +10,14 @@ const entryFiles = path.join(__dirname, '../contents/public/index.html')
 const options = {
 	outDir: path.join(__dirname, '../dist'),
 	outFile: 'index.html',
+	cacheDir: '.vbook/cache',
+	hmr: false,
+	// target: 'node',
 	// watch: false,
 	// cache: false
 	// publicUrl: './',
 	// detailedReport: true
 }
-
-console.log(process.cwd(), __dirname)
 
 module.exports = async function (opts, version) {
 	const bundler = new Bundler(entryFiles, options);
