@@ -23,6 +23,7 @@
 <script>
 import MarkdownIt from '../../components/markdownIt'
 import Navs from '../../components/navs'
+import navs from '../../../../index.js'
 
 export default {
     name: "home",
@@ -33,11 +34,8 @@ export default {
     data() {
         return {
             inner: '# VBook\n请选择菜单内容',
-            navs: []
+            navs
         }
-    },
-    mounted () {
-        this.getList ()
     },
     methods: {
         changeEvt (nav) {
@@ -53,15 +51,6 @@ export default {
                 method: 'GET'
             }).then(res => {
                 this.inner = this.safeStr( res.data )
-            })
-        },
-
-        getList () {
-            this.$axios({
-                url: `/vbook/index`,
-                method: 'GET'
-            }).then(res => {
-                this.navs = Function (`return ${res.data}`)()
             })
         },
 

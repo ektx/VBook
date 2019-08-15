@@ -1,38 +1,43 @@
-#! /usr/bin/env node
-
-const program = require('commander')
-const package = require('./package.json')
-const main = require('./bin/main')
-const version = package.version
-
-program
-  .version(version)
-  .option('-p, --port [port]', 'serve port, default: 8888')
-  .option('-s, --https', 'use HTTPS, default HTTP')
-
-program.on('--help', function () {
-  console.log(`
-  Welcome Use VBook: ${version}
-
-  Quick Start: vbook
-
-  Use Option:
-  > vbook -p 8888
-  `)
-})
-
-program.parse(process.argv)
-
-// 重置端口
-let port = parseInt(program.port)
-
-if (program.port && !isNaN(port)) {
-  program.port = port
-} else {
-  program.port = 8888
-}
-
-main({
-  ...program,
-  version
-})
+export default [
+    {
+        label: '使用指南',
+        file: 'help/welcome',
+        children: [
+            {
+                label: '快速上手',
+                file: 'help/welcome'
+            },
+            {
+                label: 'Markdown 规则',
+                file: 'help/markdown'
+            }
+        ]
+    },
+    {
+        label: '文档示例',
+        children: [
+            {
+                label: '内部 Vue 组件',
+                children: [
+                    {
+                        label: 'hello world',
+                        file: 'help/helloworld'
+                    }
+                ]
+            },
+            {
+                label: '外部 Vue 项目',
+                children: [
+                    {
+                        label: '与 Elemenu-UI 混合开发',
+                        file: 'help/development'
+                    },
+                    {
+                        label: '与 iview 混合开发',
+                        file: 'help/development'
+                    }
+                ]
+            }
+        ]
+    }
+]
