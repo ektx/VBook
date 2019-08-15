@@ -62,3 +62,4 @@ local.properties
 dist/
 yarn.lock
 .cache/
+package-lock.json
