@@ -9,6 +9,7 @@
     "vbook": "index.js"
   },
   "dependencies": {
+    "autoprefixer": "^9.6.1",
     "axios": "^0.19.0",
     "cropperjs": "^1.5.5",
     "highlight.js": "^9.15.9",
@@ -17,6 +18,7 @@
     "markdown-it-ins": "^2.0.0",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
+    "postcss-modules": "^1.4.1",
     "uslug": "^1.0.4",
     "vue": "^2.6.10",
     "vue-hot-reload-api": "^2.3.3",
