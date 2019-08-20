@@ -1,10 +1,13 @@
 #! /usr/bin/env node
 
 const program = require('commander')
+const path = require('path')
 const package = require('./package.json')
 const main = require('./bin/main')
 const link = require('./bin/link')
 const version = package.version
+const appPathArr = process.cwd().split(path.sep)
+const appName = appPathArr[appPathArr.length -2]
 
 program
   .version(version)
@@ -33,12 +36,13 @@ if (program.port && !isNaN(port)) {
 } else {
   program.port = 8888
 }
-console.log(11, program.link)
+
 if (program.link) {
-  link()
+  link(appName)
 } else {
   main({
     ...program,
+    appName,
     version
   })
 }

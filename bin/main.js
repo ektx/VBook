@@ -4,23 +4,26 @@ const app = require('express')()
 const fs = require('fs')
 const mime = require('mime')
 
-// 入口文件地址
-const entryFiles = path.join(__dirname, '../contents/public/index.html')
 
-const options = {
-	outDir: path.join(__dirname, '../dist'),
-	outFile: 'index.html',
-	cacheDir: '.vbook/cache',
-	hmr: false,
-	// target: 'node',
-	// watch: false,
-	// cache: false
-	// publicUrl: './',
-	// detailedReport: true
-}
 
-module.exports = async function (opts, version) {
-	const bundler = new Bundler(entryFiles, options);
+module.exports = async function ({appName, version, ...opts}) {
+	const docRoot = path.join(__dirname, `../.app/${appName}`)
+	// 入口文件地址
+	const entryFiles = path.join(docRoot, 'contents/public/index.html')
+
+	const options = {
+		outDir: path.join(docRoot, 'dist'),
+		outFile: 'index.html',
+		cacheDir: path.join(docRoot, 'cache'),
+		hmr: false,
+		// target: 'node',
+		// watch: false,
+		// cache: false
+		// publicUrl: './',
+		// detailedReport: true
+	}
+
+	const bundler = new Bundler(entryFiles, options)
 
 	app.get('*', function (req, res, next){
 		if (req.path.endsWith('.md')) {
@@ -38,12 +41,13 @@ module.exports = async function (opts, version) {
 
 	app.use(bundler.middleware())
 
-	app.listen(opts.port)
+	app.listen(opts.port, () => {
+console.log(`Server on http://localhost:${opts.port}`)
+	})
 }
 
 function streamEvt (req, res) {
 	let file = path.join(process.cwd(), req.$file)
-	console.log(file)
 
 	fs.access(file, err => {
 		if (err) {
