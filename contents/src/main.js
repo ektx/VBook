@@ -7,7 +7,6 @@ import  MyLib from '../../src/'
 import './assets/css/md-vue.less'
 import 'highlight.js/styles/vs.css'
 
-console.log(MyLib)
 // 你在本示例中要使用的组件库
 // 这是我们添加一个本地开发中的库
 // 使用库

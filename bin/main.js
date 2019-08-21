@@ -15,7 +15,7 @@ module.exports = async function ({appName, version, ...opts}) {
 		outDir: path.join(docRoot, 'dist'),
 		outFile: 'index.html',
 		cacheDir: path.join(docRoot, 'cache'),
-		hmr: false,
+		// hmr: false,
 		// target: 'node',
 		// watch: false,
 		// cache: false

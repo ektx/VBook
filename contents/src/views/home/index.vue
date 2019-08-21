@@ -2,8 +2,8 @@
     <div class="home-view">
         <header>
             <div class="logo-box">
-                <img src="/logo.svg" alt="VBook">
-                <h1>VBook</h1>
+                <img v-if="logoUrl" :src="logoUrl">
+                <h1>{{info.title || 'VBook'}}</h1>
             </div>
             <div class="search-box">
                 <input type="text">
@@ -11,7 +11,7 @@
         </header>
         <section class="content">
             <aside>
-                <Navs :value="navs" @change="changeEvt"/>
+                <Navs :value="aside" @change="changeEvt"/>
             </aside>
             <main>
                 <MarkdownIt :value="inner"/>
@@ -23,6 +23,7 @@
 <script>
 import MarkdownIt from '../../components/markdownIt'
 import Navs from '../../components/navs'
+import info from '../../../../index.js'
 
 export default {
     name: "home",
@@ -33,11 +34,21 @@ export default {
     data() {
         return {
             inner: '# VBook\n请选择菜单内容',
-            navs: []
+            navs: [],
+            info
         }
     },
-    mounted () {
-        this.getList ()
+    computed: {
+        aside () {
+            return this.info.aside || []
+        },
+        logoUrl () {
+            if (Reflect.has(this.info, 'logo')) {
+                return this.info.logo
+            } else {
+                return '/logo.svg'
+            }
+        }
     },
     methods: {
         changeEvt (nav) {
@@ -53,15 +64,6 @@ export default {
                 method: 'GET'
             }).then(res => {
                 this.inner = this.safeStr( res.data )
-            })
-        },
-
-        getList () {
-            this.$axios({
-                url: `/vbook/index`,
-                method: 'GET'
-            }).then(res => {
-                this.navs = Function (`return ${res.data}`)()
             })
         },
 

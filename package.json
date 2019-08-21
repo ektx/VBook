@@ -27,9 +27,15 @@
     "less": "^3.9.0",
     "mime": "^2.4.4",
     "parcel-bundler": "^1.12.3",
+    "parcel-plugin-static-files-copy": "^2.2.1",
     "vue-template-compiler": "^2.6.10"
   },
   "alias": {
     "vue": "./node_modules/vue/dist/vue.js"
+  },
+  "staticFiles": {
+    "staticPath": [
+      "contents/public"
+    ]
   }
 }

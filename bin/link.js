@@ -21,6 +21,9 @@ module.exports = function (name) {
   let contents = path.join(__dirname, '../contents')
   let contentsLink = path.join(docRoot, 'contents')
   createLink(contents, contentsLink)
+  let mainFrom = path.join(process.cwd(), './index.js')
+  let mainLink = path.join(docRoot, './index.js')
+  createLink(mainFrom, mainLink)
   // 创建独立的包管理文件
   fs.copySync(
     path.join(__dirname, '../package.json'),
