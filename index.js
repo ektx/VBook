@@ -11,9 +11,32 @@ const appName = appPathArr[appPathArr.length -2]
 
 program
   .version(version)
+
+program
+  .command('run')
+  .description('start the service')
   .option('-p, --port [port]', 'serve port, default: 8888')
   .option('-s, --https', 'use HTTPS, default HTTP')
-  .option('-l, --link', 'use HTTPS, default HTTP')
+  .action(cmd => {
+    // 重置端口
+    let port = parseInt(cmd.port)
+
+    if (cmd.port && !isNaN(port)) {
+      cmd.port = port
+    } else {
+      cmd.port = 8888
+    }
+
+    main({...cmd, appName, version})
+  })
+
+program
+  .command('init')
+  .description('set vbook link')
+  .action(() => {
+    console.log('init')
+    link(appName)
+  })
 
 program.on('--help', function () {
   console.log(`
@@ -27,22 +50,3 @@ program.on('--help', function () {
 })
 
 program.parse(process.argv)
-
-// 重置端口
-let port = parseInt(program.port)
-
-if (program.port && !isNaN(port)) {
-  program.port = port
-} else {
-  program.port = 8888
-}
-
-if (program.link) {
-  link(appName)
-} else {
-  main({
-    ...program,
-    appName,
-    version
-  })
-}
