@@ -2,6 +2,8 @@
 
 [toc]
 
+make demo easy!
+
 欢迎你使用 VBook 。 VBook 希望可以帮助你高效的书写 Vue 组件库文档。
 
 ## 特性
@@ -10,68 +12,66 @@
 - 快速搭建自己的 Vue 组件或示例的文档。
 - 灵活的定制化，可以自己调整风格与主题。
 
+## 安装
+
+```bash
+yarn global add vbook
+# or
+npm i -g vbook
+```
+
 ## 使用
 
 ```bash
-# 克隆项目
-git clone https://github.com/ektx/VBook.git
+# 进入你需要展示的目录
+cd doc
 
-# 修改项目名称
-mv VBook your_project
+# 初始化目录
+vbook init
 
-# 开发
-cd your_project
-
-# 安装依赖
-yarn
-# or 
-npm i
-
-# 运行服务
-yarn serve
-# or 
-npm run serve
+# 运行
+vbook run
 ```
 
-## 添加文档
+## 基础约定
 
-**项目结构：**
+### 项目结构
 
 ```
  your_project
   ├─- doc      文档存放地址
-  ├─- public   静态资源
+  |  ├─- readme.md markdown文档，这里只列一个
+  |  ├─- index.js  vbook 展示控制文件
   ├─- src      项目文档，如果需要定置，修改此处
-  |  ├─- navs.js  菜单列表配制文件
-  |  ├─- ...      其它文件
+  |  ├─- index.js  组件库主入口
+  |  ├─- styles    组件库样式文件夹
+  |     ├─- index.less 样式文件主入口，支持index.sass
 ```
 
-> 我们可以把文档写在 doc 的目录中，通过 navs.js 来管理结构与引用。
+> 目前暂不支持修改主件库的位置及组件库样式的引用位置。
 
-::: warning
-其它文件用户不用操作，如需要定置化时，可自行修改。
-:::
 
-### markdown 规则
-
-> 查看 markdown 规则菜单
-
-### navs.js 规则
+### index.js 规则
 
 ```js
-export default [
+export default {
+  // 页面标题
+  title: 'VBook',
+  // logo地址
+  logo: '',
+  // 侧边菜单内容列表
+  aside: [
     {
-        label: '使用指南',
-        // 这是下级，与 file 只能保持一个
-        children: [
-            {
-                label: '快速上手',
-                // file： markdown 在 doc 中的位置
-                file: 'help/welcome'
-            }
-            // 更多内容
-        ]
+      label: '使用指南',
+      // doc 中的文件位置
+      file: 'readme',
+      children: [
+        {
+          label: '使用指南',
+          file: 'readme'
+        }
+      ]
     },
-    // 添加更多内容
-]
+  ]
+}
 ```
