@@ -1,7 +1,5 @@
 # VBook
 
-[toc]
-
 make demo easy!
 
 欢迎你使用 VBook 。 VBook 希望可以帮助你高效的书写 Vue 组件库文档。
@@ -15,9 +13,9 @@ make demo easy!
 ## 安装
 
 ```bash
-yarn global add vbook
+yarn global add @ektx/v-book
 # or
-npm i -g vbook
+npm i -g @ektx/v-book
 ```
 
 ## 使用
