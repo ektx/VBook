@@ -76,6 +76,7 @@ export default {
     computed: {
         HTML () {
             let html = `<div class="markdown-it-com">${this.md.render(this.value)}</div>`
+            
             let {render, staticRenderFns} = this.$compile(html)
 
             // staticRenderFns belong into $options, 

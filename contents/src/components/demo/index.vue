@@ -75,7 +75,14 @@ export default {
             if (result) {
                 return Function(`return ${result.substr(15)}`)()
             } else {
-                return {}
+                return {
+                    data () {
+                        return {}
+                    },
+                    watch: {},
+                    methods: {},
+                    mounted () {}
+                }
             }
         },
         // 获取样式内容
@@ -100,18 +107,23 @@ export default {
             if (!content) {
                 return content
             }
-            content = content.replace(/<(script|style)[\s\S]+<\/\1>/g, '').trim()
+            content = content.replace(/<(script|style)[\s\S]+<\/\1>/g, '')
+            content = content.split('\n')
+            // 除去前后 template
+            content = content.slice(1, content.length-1)
 
-            return content.replace(/template>/g, 'div>')
+            return `<div>${content.join('')}</div>`
         },
 
         init () {
-            let { data, methods, mounted } = this.stripScript( this.js )
+            let { data, methods, mounted, watch } = this.stripScript( this.js )
+            let template = this.stripTemplate( this.html )
 
             let Com = Vue.extend({
                 router: this.$router,
-                template: this.stripTemplate( this.html ),
+                template,
                 data,
+                watch,
                 methods,
                 mounted
             })
