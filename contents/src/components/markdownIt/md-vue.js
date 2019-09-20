@@ -65,7 +65,11 @@ export default function vue_plugin(md, name, options) {
             
             switch (true) {
                 case str === '<template>':
-                    temStart = nextLine
+                    // 必须开始标签小于结束标签
+                    // 防止多个 template 时无法正确取值
+                    if (temStart <= temEnd) {
+                        temStart = nextLine
+                    }
                     break
                 case str === '</template>':
                     temEnd = nextLine
@@ -83,10 +87,10 @@ export default function vue_plugin(md, name, options) {
                     cssEnd = nextLine
             }
 
-            // console.log(`start: ${start} max: ${max}`)
-            // console.log('text:', state.src.slice(start, max))
-            // console.log('sCount', state.sCount[nextLine])
-            // console.log('blkIndent', state.blkIndent)
+            console.log(`start: ${start} max: ${max}`)
+            console.log('text:', state.src.slice(start, max))
+            console.log('sCount', state.sCount[nextLine])
+            console.log('blkIndent', state.blkIndent)
 
             if (state.src.slice(start, max) === ':::') {
                 auto_closed = true
@@ -107,6 +111,7 @@ export default function vue_plugin(md, name, options) {
             state.bMarks[temStart], 
             state.bMarks[temEnd +1]
         )
+        console.log(token.$template)
         token.$js = state.src.slice(
             state.bMarks[jsStart],
             state.bMarks[jsEnd +1]
