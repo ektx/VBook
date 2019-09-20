@@ -87,10 +87,10 @@ export default function vue_plugin(md, name, options) {
                     cssEnd = nextLine
             }
 
-            console.log(`start: ${start} max: ${max}`)
-            console.log('text:', state.src.slice(start, max))
-            console.log('sCount', state.sCount[nextLine])
-            console.log('blkIndent', state.blkIndent)
+            // console.log(`start: ${start} max: ${max}`)
+            // console.log('text:', state.src.slice(start, max))
+            // console.log('sCount', state.sCount[nextLine])
+            // console.log('blkIndent', state.blkIndent)
 
             if (state.src.slice(start, max) === ':::') {
                 auto_closed = true
@@ -111,7 +111,6 @@ export default function vue_plugin(md, name, options) {
             state.bMarks[temStart], 
             state.bMarks[temEnd +1]
         )
-        console.log(token.$template)
         token.$js = state.src.slice(
             state.bMarks[jsStart],
             state.bMarks[jsEnd +1]
