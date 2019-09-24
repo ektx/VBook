@@ -26,6 +26,7 @@ module.exports = async function ({appName, version, ...opts}) {
 	const bundler = new Bundler(entryFiles, options)
 
 	app.get('*', function (req, res, next){
+		console.log(req.path)
 		if (req.path.endsWith('.md')) {
 			req.$file = req.path
 			streamEvt(req, res)
@@ -34,24 +35,22 @@ module.exports = async function ({appName, version, ...opts}) {
 			next()
 		}
 	})
-	.get('/vbook/index', function(req, res) {
-		req.$file = 'index.js'
-		streamEvt(req, res)
-	})
 
 	app.use(bundler.middleware())
 
-	app.listen(opts.port, () => {
-console.log(`Server on http://localhost:${opts.port}`)
+	bundler.on('buildEnd', () => {
+		app.listen(opts.port, () => {
+			console.log(`Server on http://localhost:${opts.port}`)
+		})
 	})
 }
 
 function streamEvt (req, res) {
 	let file = path.join(process.cwd(), req.$file)
-
+	console.log('file:', file)
 	fs.access(file, err => {
 		if (err) {
-			res.send('file not exist')
+			res.send(`:::error\n文件并不存在! ${file} \n:::`)
 			return
 		}
 
