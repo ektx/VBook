@@ -29,6 +29,9 @@ vbook init
 
 # 运行
 vbook run
+
+# 帮助
+vbook -h
 ```
 
 ## 基础约定

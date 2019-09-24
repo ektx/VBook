@@ -27,9 +27,18 @@ module.exports = function (name) {
   let contentsLink = path.join(docRoot, 'contents')
   createLink(contents, contentsLink)
 
+  // 创建引用文件
   let mainFrom = path.join(process.cwd(), './index.js')
   let mainLink = path.join(docRoot, './index.js')
   createLink(mainFrom, mainLink)
+  
+  let postcssFrom = path.join(__dirname, '../postcss.config.js')
+  let postcssLink = path.join(docRoot, './postcss.config.js')
+  createLink(postcssFrom, postcssLink)
+
+  let browserListFrom = path.join(__dirname, '../.browserslistrc')
+  let browserListLink = path.join(docRoot, './.browserslistrc')
+  createLink(browserListFrom, browserListLink)
 
   // 创建独立的包管理文件
   fs.copySync(

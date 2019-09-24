@@ -13,6 +13,14 @@ program
   .version(version)
 
 program
+  .command('init')
+  .description('set vbook link')
+  .action(() => {
+    console.log('init')
+    link(appName)
+  })
+
+program
   .command('run')
   .description('start the service')
   .option('-p, --port [port]', 'serve port, default: 8888')
@@ -28,14 +36,6 @@ program
     }
 
     main({...cmd, appName, version})
-  })
-
-program
-  .command('init')
-  .description('set vbook link')
-  .action(() => {
-    console.log('init')
-    link(appName)
   })
 
 program.on('--help', function () {

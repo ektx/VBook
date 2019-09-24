@@ -4,17 +4,18 @@ const app = require('express')()
 const fs = require('fs')
 const mime = require('mime')
 const { getIPs } = require('./getIPs')
+const homedir = require('os').homedir()
 
 
 module.exports = async function ({appName, version, ...opts}) {
-	const docRoot = path.join(__dirname, `../.app/${appName}`)
+	const appPath = path.join(homedir, `.vbook/${appName}`)
 	// 入口文件地址
-	const entryFiles = path.join(docRoot, 'contents/public/index.html')
+	const entryFiles = path.join(appPath, 'contents/public/index.html')
 
 	const options = {
-		outDir: path.join(docRoot, 'dist'),
+		outDir: path.join(appPath, 'dist'),
 		outFile: 'index.html',
-		cacheDir: path.join(docRoot, 'cache'),
+		cacheDir: path.join(appPath, 'cache'),
 		// hmr: false,
 		// target: 'node',
 		// watch: false,
@@ -26,7 +27,6 @@ module.exports = async function ({appName, version, ...opts}) {
 	const bundler = new Bundler(entryFiles, options)
 
 	app.get('*', function (req, res, next){
-		console.log(req.path)
 		if (req.path.endsWith('.md')) {
 			req.$file = req.path
 			streamEvt(req, res)
@@ -41,6 +41,7 @@ module.exports = async function ({appName, version, ...opts}) {
 	bundler.on('buildEnd', () => {
 		app.listen(opts.port, async () => {
 			let {IPv4} = await getIPs()
+
 			console.log(`
 Server Running at:
 
