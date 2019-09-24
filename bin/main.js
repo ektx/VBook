@@ -3,7 +3,7 @@ const path = require('path')
 const app = require('express')()
 const fs = require('fs')
 const mime = require('mime')
-
+const { getIPs } = require('./getIPs')
 
 
 module.exports = async function ({appName, version, ...opts}) {
@@ -39,15 +39,23 @@ module.exports = async function ({appName, version, ...opts}) {
 	app.use(bundler.middleware())
 
 	bundler.on('buildEnd', () => {
-		app.listen(opts.port, () => {
-			console.log(`Server on http://localhost:${opts.port}`)
+		app.listen(opts.port, async () => {
+			let {IPv4} = await getIPs()
+			console.log(`
+Server Running at:
+
+  - Local:   http://localhost:${opts.port}/
+  - Network: http://${IPv4}:${opts.port}/
+
+  * Ctrl + C : Stop the server, more infomation vist https://github.com/ektx/VBook
+`)
 		})
 	})
 }
 
 function streamEvt (req, res) {
 	let file = path.join(process.cwd(), req.$file)
-	console.log('file:', file)
+
 	fs.access(file, err => {
 		if (err) {
 			res.send(`:::error\n文件并不存在! ${file} \n:::`)
@@ -56,7 +64,6 @@ function streamEvt (req, res) {
 
 		let stream = fs.createReadStream(file, {encoding: 'utf8'})
 		
-		// res.writeHead(200)
 		res.setHeader('Content-Type', mime.getType(file))
 		stream.pipe(res)
 	})
