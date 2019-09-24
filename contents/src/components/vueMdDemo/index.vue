@@ -7,7 +7,7 @@ import mkItSup from 'markdown-it-sup'
 import mkItIns from 'markdown-it-ins'
 import mkItToc from './md-toc.js'
 import mkItVue from './md-vue.js'
-import demo from '../demo'
+import demo from '../vueMdBoard'
 
 export default {
     name: 'v-markdown-it',
@@ -102,3 +102,7 @@ export default {
     }
 }
 </script>
+
+<style lang="less">
+@import url('./layout.less');
+</style>

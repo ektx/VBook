@@ -3,8 +3,6 @@ import axios from 'axios'
 import App from './App.vue'
 import router from './router/'
 import  MyLib from '../../src/'
-// markdown 效果
-import './assets/css/md-vue.less'
 import 'highlight.js/styles/vs.css'
 
 // 你在本示例中要使用的组件库

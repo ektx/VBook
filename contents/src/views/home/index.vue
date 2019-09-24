@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import MarkdownIt from '../../components/markdownIt'
+import MarkdownIt from '../../components/vueMdDemo'
 import Navs from '../../components/navs'
 import info from '../../../../index.js'
 
