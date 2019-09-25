@@ -19,10 +19,15 @@ export default function vue_plugin(md, name, options) {
         let demoStr = state.src.slice(state.bMarks[startLine], state.eMarks[startLine])
         let max = state.eMarks[startLine]
         let auto_closed = false
-        
-        if (!demoStr.startsWith('::: demo')) {
+
+        if (!demoStr.startsWith(':::')) {
             return false
         }
+
+        // 自动处理标签
+        // :::demo => <demo></demo>
+        // :::demo-theme => <demo-theme/>
+        let markToken = demoStr.slice(3).trim()
 
         if (slient) { return true }
 
@@ -36,6 +41,12 @@ export default function vue_plugin(md, name, options) {
         let cssEnd = startLine
 
         for (;;) {
+            // console.log('nextLine:', nextLine)
+            // console.log(`start: ${start} max: ${max}`)
+            // console.log('text:', state.src.slice(start, max))
+            // console.log('sCount', state.sCount[nextLine])
+            // console.log('blkIndent', state.blkIndent)
+
             nextLine++
             // 在文档与父级结束时 需要自动结束循环
             if (nextLine >= endLine) {
@@ -87,20 +98,15 @@ export default function vue_plugin(md, name, options) {
                     cssEnd = nextLine
             }
 
-            // console.log(`start: ${start} max: ${max}`)
-            // console.log('text:', state.src.slice(start, max))
-            // console.log('sCount', state.sCount[nextLine])
-            // console.log('blkIndent', state.blkIndent)
-
             if (state.src.slice(start, max) === ':::') {
                 auto_closed = true
                 break
             }
         }
-        
+
         let old_parent = state.parentType
         let old_line_max = state.lineMax
-        let token = state.push('vue-code_open', 'demo', 1)
+        let token = state.push('vue-code_open', markToken, 1)
 
         token.markup = ':::'
         token.content = state.src.slice(
@@ -120,12 +126,12 @@ export default function vue_plugin(md, name, options) {
             state.bMarks[cssEnd +1]
         )
         token.map = [startLine, nextLine]
-        token.info = 'demo'
+        token.info = markToken
         token.block = true
 
         state.md.block.tokenize(state, startLine + 1, nextLine)
         
-        token = state.push('vue-code_close', 'demo', -1)
+        token = state.push('vue-code_close', markToken, -1)
         token.markup = ':::'
         token.block = true
         state.parentType = old_parent
