@@ -1,11 +1,13 @@
 const fs = require('fs-extra')
 const path = require('path')
 const homedir = require('os').homedir()
+const execa = require('execa')
 
 /**
  * @param {string} name 项目文件名
  */
-module.exports = function (name) {
+module.exports = async function (name) {
+  console.log('⚙️  初始化中！Init Starting...')
   // 在用户目录下创建一个完整的项目库
   const docRoot = path.join(homedir, `.vbook/${name}`)
 
@@ -18,8 +20,9 @@ module.exports = function (name) {
 
   // 创建共用包的符号链接
   // TODO: 移入用户目录下的 .vbook 中
-  let modFrom = path.join(__dirname, '../node_modules')
-  let modLink = path.join(docRoot, 'node_modules')
+  let modFrom = path.join(docRoot, '../node_modules')
+  fs.ensureDirSync(modFrom, 0o2775)
+  let modLink = path.join(docRoot, './node_modules')
   createLink(modFrom, modLink)
 
   // 创建渲染层的模板引用
@@ -45,7 +48,21 @@ module.exports = function (name) {
     path.join(__dirname, '../package.json'),
     path.join(docRoot, 'package.json')
   )
-  console.log('🎉 创建完成！Init Done!')
+  
+  // 安装包依赖
+  let child = execa('yarn', {cwd: docRoot, stdio: 'pipe'})
+
+  child.stdout.on('data', buf => {
+    process.stdout.write(buf)
+  })
+  
+  child.stderr.on('data', buf => {
+    process.stderr.write(buf)
+  })
+
+  child.on('close', () => {
+    console.log('🎉 创建完成！Init Done!\n👉 Go on with: vbook run')
+  })
 }
 
 /**

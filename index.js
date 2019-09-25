@@ -16,7 +16,6 @@ program
   .command('init')
   .description('set vbook link')
   .action(() => {
-    console.log('init')
     link(appName)
   })
 
