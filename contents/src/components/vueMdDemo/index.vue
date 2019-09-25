@@ -8,11 +8,13 @@ import mkItIns from 'markdown-it-ins'
 import mkItToc from './md-toc.js'
 import mkItVue from './md-vue.js'
 import demo from '../vueMdBoard'
+import demoTheme from '../vueMdTheme'
 
 export default {
     name: 'v-markdown-it',
     components: {
-        demo
+        demo,
+        demoTheme
     },
     props: {
         value: {
