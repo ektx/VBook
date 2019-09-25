@@ -77,7 +77,7 @@ export default {
         pointer-events: none;
 
         &.is-link {
-            color: #333;
+            color: var(--night);
             cursor: pointer;
             pointer-events: auto;
             transition: color .35s ease-in-out;

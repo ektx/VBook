@@ -103,11 +103,27 @@ export default {
         height: 60px;
         padding: 0 30px;
         background: #fff;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid var(--gainsboro);
 
         @supports (backdrop-filter: blur(5px)) {
-            background-color: rgba(255, 255, 255, .7);
+            background-color: rgba(255, 255, 255, .8);
             backdrop-filter: blur(5px);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            @supports (backdrop-filter: blur(5px)) {
+                background-color: rgba(33, 33, 33, .8);
+                backdrop-filter: blur(5px);
+                border-bottom: transparent;
+            }
+        }
+        
+        .dark & {
+            @supports (backdrop-filter: blur(5px)) {
+                background-color: rgba(33, 33, 33, .8);
+                backdrop-filter: blur(5px);
+                border-bottom: transparent;
+            }
         }
     }
 
@@ -122,7 +138,7 @@ export default {
         }
         h1 {
             display: inline-block;
-            color: #273849;
+            color: var(--night);
         }
     }
 
