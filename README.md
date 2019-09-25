@@ -13,21 +13,20 @@ make demo easy!
 ## 安装
 
 ```bash
-yarn global add @ektx/v-book
-# or
 npm i -g @ektx/v-book
 ```
 
 ## 使用
 
 ```bash
-# 进入你需要展示的目录
+# 进入你需要展示的 markdown 目录
 cd doc
 
 # 初始化目录
 vbook init
 
 # 运行
+# * 如果启动失败，再试一次
 vbook run
 
 # 帮助
@@ -76,3 +75,9 @@ export default {
   ]
 }
 ```
+
+# FAQ
+
+Unknown version 76 of android
+
+打开报错信息位置，如：yarn/global/node_modules/parcel-bundler/node_modules/@babel/preset-env/node_modules/browserslist/index.js；打开此目录，删除 parcel-bundler/node_modules/@babel/preset-env/node_modules/browserslist 中的 browserslist 模块。
