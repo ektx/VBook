@@ -10,8 +10,7 @@ module.exports = async function ({appName, version, ...opts}) {
 	const appPath = path.join(homedir, `.vbook/${appName}`)
 	// 入口文件地址
 	const entryFiles = path.join(appPath, 'contents/public/index.html')
-	// 设置一个延迟启动服务功能
-	let timer = null
+	let servered = false
 
 	const options = {
 		outDir: path.join(appPath, 'dist'),
@@ -40,17 +39,16 @@ module.exports = async function ({appName, version, ...opts}) {
 	app.use(bundler.middleware())
 
 	bundler.on('buildStart', entryPoints => {
-		// 清除延迟服务
-		if (timer) clearTimeout(timer)
+
 	})
 
-	bundler.on('buildEnd', () => {
-		// 防止服务多次构建，保证只在最后一次运行服务功能
-		timer = setTimeout(() => {
-			startServe(app, opts.port)
-		}, 1000)
-	})
+	bundler.on('bundled', () => {
+		if (servered) return
 
+		servered = true
+		startServe(app, opts.port)
+	})
+	
 }
 
 /**
