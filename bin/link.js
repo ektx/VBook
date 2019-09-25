@@ -1,13 +1,32 @@
-const fs = require('fs-extra')
 const path = require('path')
-const homedir = require('os').homedir()
 const execa = require('execa')
+const fs = require('fs-extra')
+const inquirer = require('inquirer')
+const homedir = require('os').homedir()
+const {hasYarn} = require('./env')
 
 /**
  * @param {string} name 项目文件名
  */
 module.exports = async function (name) {
+  // 提示用户是否使用淘宝镜像要安装依赖
+  let { taobaoURL } = await inquirer.prompt([{
+    type: 'confirm',
+		name: 'taobaoURL',
+    message: 'Use Taobao Registry URL?',
+    default: false
+  }])
+
+  let TAOBAO_NPM_URL = '--registry=https://registry.npm.taobao.org'
+  let execaArgs = []
+
+  // 如果确认使用 taobao 镜像时
+  if (taobaoURL) {
+    execaArgs.push(TAOBAO_NPM_URL)
+  }
+
   console.log('⚙️  初始化中！Init Starting...')
+
   // 在用户目录下创建一个完整的项目库
   const docRoot = path.join(homedir, `.vbook/${name}`)
 
@@ -50,12 +69,20 @@ module.exports = async function (name) {
   )
   
   // 安装包依赖
-  let child = execa('yarn', {cwd: docRoot, stdio: 'pipe'})
+  let bin
+  if (hasYarn()) {
+    bin = 'yarn'
+  } else {
+    bin = 'npm'
+    execaArgs = ['install', ...execaArgs]
+  }
+
+  let child = execa(bin, execaArgs, {cwd: docRoot, stdio: 'pipe'})
 
   child.stdout.on('data', buf => {
     process.stdout.write(buf)
   })
-  
+
   child.stderr.on('data', buf => {
     process.stderr.write(buf)
   })

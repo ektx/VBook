@@ -37,5 +37,8 @@
       "contents/public"
     ]
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "inquirer": "^7.0.0"
+  }
 }
