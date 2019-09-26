@@ -1,6 +1,6 @@
 {
   "name": "@ektx/v-book",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "bin": {
     "vbook": "index.js"
   },
@@ -13,6 +13,7 @@
     "express": "^4.17.1",
     "fs-extra": "^8.1.0",
     "highlight.js": "^9.15.9",
+    "inquirer": "^7.0.0",
     "less": "^3.9.0",
     "macaddress": "^0.2.9",
     "markdown-it": "^9.1.0",
@@ -38,7 +39,5 @@
     ]
   },
   "license": "MIT",
-  "devDependencies": {
-    "inquirer": "^7.0.0"
-  }
+  "devDependencies": {}
 }
