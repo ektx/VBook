@@ -5,7 +5,12 @@
       <p>白昼与暗夜模式效果。</p>
       <div class="color-list">
         <ul v-for="(item, key) in data" :key="key" :class="key">
-          <li v-for="color in item" :key="color" :style="getStyle(color)">
+          <li 
+            v-for="color in item" 
+            :key="color" 
+            :style="getStyle(color)"
+            @click="copyVarColor(color)"
+          >
           </li>
         </ul>
       </div>
@@ -86,6 +91,21 @@ export default {
       for (let i = 0; i < 100; i+= 5) {
         this.grayArr.push(`--gray${i}`)
       }
+    },
+
+    copyVarColor (color) {
+      if (navigator.clipboard) {
+        navigator.clipboard
+          .writeText(color)
+          .then(() => {
+            console.log("Text copied to clipboard:", color);
+          })
+          .catch(err => {
+            console.error(`Could not copy text: ${err}`);
+          });
+      } else {
+        alert('升级你的浏览器！')
+      }
     }
   }
 };
@@ -104,10 +124,16 @@ export default {
       color: #333;
 
       li {
+        flex: 1;
         height: 3em;
-        width: 5em;
         font-size: 12px;
-        padding: 0 20px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+
+        &:hover {
+          border-color: var(--link);
+        }
       }
 
       &.light {
