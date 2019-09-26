@@ -11,13 +11,13 @@
 @import url('../../src/styles/index.less');
 
 html {
-  background-color: var(--milkwhite);
+  background-color: var(--gray100);
 }
 
 #app {
-  transition: background .4s ease-in-out;
+  transition: background-color .4s ease-in-out;
 }
 .dark {
-  background-color: var(--milkwhite);
+  background-color: var(--gray80);
 }
 </style>

@@ -1,11 +1,35 @@
 <template>
   <div class="vue-md-theme">
-    <h1>vue theme</h1>
-    <div class="color-list">
-      <ul v-for="(item, key) in data" :key="key" :class="key">
-        <li v-for="color in item" :key="color" :style="getStyle(color)">
-        </li>
-      </ul>
+    <div class="group">
+      <h1>黑白</h1>
+      <p>白昼与暗夜模式效果。</p>
+      <div class="color-list">
+        <ul v-for="(item, key) in data" :key="key" :class="key">
+          <li v-for="color in item" :key="color" :style="getStyle(color)">
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="group">
+      <h1>常用模块色</h1>
+      <p>常用模块色基本不随系统变换颜色。</p>
+
+      <div class="color-card-box">
+        <div 
+          class="color-card" 
+          v-for="name in normalColor" 
+          :key="name"
+        >
+          <div class="header" :style="getStyle(`--${name}`)">
+            <h3>{{name}}</h3>
+            <p>var(--{{name}})</p>
+          </div>
+          <ul class="footer">
+            <li :style="getStyle(`--${name}Hover`)"></li>
+            <li :style="getStyle(`--${name}Active`)"></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -23,10 +47,21 @@ export default {
   data() {
     return {
       data: {},
+      grayArr: [],
+      normalColor: [
+        'link',
+        'success',
+        'warn',
+        'error'
+      ]
     };
   },
   mounted() {
     this.data = this.stripScript(this.js)
+    this.getGrayList()
+    this.data.light.unshift(...this.grayArr)
+    this.data.dark.unshift(...this.grayArr)
+    console.log(this.data)
   },
   methods: {
     // 获取 script 部分内容
@@ -45,6 +80,12 @@ export default {
       return {
         backgroundColor: `var(${val})`
       }
+    },
+
+    getGrayList () {
+      for (let i = 0; i < 100; i+= 5) {
+        this.grayArr.push(`--gray${i}`)
+      }
     }
   }
 };
@@ -54,8 +95,11 @@ export default {
 .vue-md-theme {
   .color-list {
     display: flex;
+    flex-direction: column;
     
     ul {
+      display: flex;
+      flex-direction: row;
       padding: 20px 30px;
       color: #333;
 
@@ -73,6 +117,50 @@ export default {
       &.dark {
         background: #000;
       }
+    }
+  }
+
+  .color-card-box {
+    display: flex;
+  }
+
+  .color-card {
+    flex: 1;
+    border-radius: 3px;
+    overflow: hidden;
+
+    .header {
+      height: 70px;
+      padding: 15px 20px;
+      box-sizing: border-box;
+
+      h3 {
+        font-size: 16px;
+        font-weight: 400;
+        color: #fff;
+        text-transform: capitalize;
+        opacity: .8;
+      }
+
+      p {
+        font-size: 12px;
+        line-height: 18px;
+        color: #FFF;
+        opacity: .7;
+      }
+    }
+
+    .footer {
+      display: flex;
+      height: 30px;
+
+      li {
+        flex: 1;
+      }
+    }
+
+    & + .color-card {
+      margin-left: 10px;
     }
   }
 }

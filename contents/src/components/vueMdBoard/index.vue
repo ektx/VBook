@@ -152,11 +152,11 @@ export default {
 .demo-com {
     margin: 2em 0;
     border-radius: 3px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--gray75);
 
     .display-box {
         padding: 10px;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid var(--gray75);
     }
 
     .source-box {
@@ -178,10 +178,12 @@ export default {
             color: #666;
             line-height: 3em;
             text-align: center;
-            border-top: 1px solid #ddd;
-            background-color: #fff;
-            transition: color .3s ease-in-out;
+            border-top: 1px solid var(--gray75);
+            background-color: var(--milkwhite);
             cursor: pointer;
+            transition: 
+                color .3s ease-in-out,
+                background-color .3s ease-in-out;
 
             &:hover {
                 color: #09f;

@@ -6,7 +6,10 @@
                 <h1>{{info.title || 'VBook'}}</h1>
             </div>
             <div class="search-box">
-                <input type="text">
+                <!-- <input type="text"> -->
+            </div>
+            <div class="toggle-theme-box">
+                <i @click="toggleThemeEvt"></i>
             </div>
         </header>
         <section class="content">
@@ -86,6 +89,10 @@ export default {
             }
 
             return result
+        },
+
+        toggleThemeEvt () {
+            document.querySelector('#app').classList.toggle('dark')
         }
     }
 };
@@ -117,12 +124,22 @@ export default {
                 border-bottom: transparent;
             }
         }
-        
+
         .dark & {
             @supports (backdrop-filter: blur(5px)) {
                 background-color: rgba(33, 33, 33, .8);
                 backdrop-filter: blur(5px);
                 border-bottom: transparent;
+            }
+        }
+
+        .toggle-theme-box {
+            i {
+                display: block;
+                width: 16px;
+                height: 16px;
+                border-radius: 100%;
+                background-color: var(--gray20);
             }
         }
     }
