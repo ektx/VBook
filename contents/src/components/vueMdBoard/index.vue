@@ -179,11 +179,21 @@ export default {
             line-height: 3em;
             text-align: center;
             border-top: 1px solid var(--gray75);
-            background-color: var(--milkwhite);
+            background-color: #fff;
             cursor: pointer;
             transition: 
                 color .3s ease-in-out,
                 background-color .3s ease-in-out;
+
+            .dark & {
+                color: #aaa;
+                background-color: var(--gray75);
+            }
+
+            @media (prefers-color-scheme: dark) {
+                color: #aaa;
+                background-color: var(--gray75);
+            }
 
             &:hover {
                 color: #09f;

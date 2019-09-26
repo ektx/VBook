@@ -1,7 +1,7 @@
 h1, h2, h3, h4, h5, h6, strong {
     .markdown-it-com > & {
         margin-top: 1em;
-        color: var(--night);
+        color: var(--gray10);
         font-weight: 600;
     }
 }
@@ -50,7 +50,7 @@ h1, h2, h3, h4, h5, h6, strong {
     p {
         font-size: 14px;
         line-height: 28px;
-        color: #304455;
+        color: var(--gray10);
         white-space: pre;
     }
 
@@ -87,7 +87,7 @@ h1, h2, h3, h4, h5, h6, strong {
         margin-bottom: 20px;
         width: 100%;
         max-width: 100%;
-        color: #273849;
+        color: var(--gray15);
 
         thead {
             tr {
@@ -107,11 +107,23 @@ h1, h2, h3, h4, h5, h6, strong {
                     font-size: 14px;
                     line-height: 1.4;
                     vertical-align: top;
-                    border-bottom: 1px solid #ddd;
+                    border-bottom: 1px solid var(--gray90);
+                    transition: 
+                        background-color .4s ease-in-out,
+                        border-color .4s ease-in-out;
+
+                    .dark & {
+                        border-bottom-color: var(--gray75);
+                    }
+
                 }
                 &:nth-child(2n) {
                     td {
-                        background-color: #f5f5f5;
+                        background-color: var(--gray90);
+                        
+                        .dark & {
+                            background-color: var(--gray75);
+                        }
                     }
                 }
             }
@@ -128,7 +140,7 @@ h1, h2, h3, h4, h5, h6, strong {
     blockquote {
         margin: 1em 0;
         padding: .5em 0 .5em 1em;
-        border-left: 3px solid var(--springgreen);
+        border-left: 3px solid var(--success);
         background-color: rgba(66, 185, 130, .1);
     }
 

@@ -110,7 +110,7 @@ export default {
         height: 60px;
         padding: 0 30px;
         background: #fff;
-        border-bottom: 1px solid var(--gainsboro);
+        border-bottom: 1px solid var(--gray85);
 
         @supports (backdrop-filter: blur(5px)) {
             background-color: rgba(255, 255, 255, .8);
@@ -118,6 +118,7 @@ export default {
         }
 
         @media (prefers-color-scheme: dark) {
+            background-color: var(--gray85);
             @supports (backdrop-filter: blur(5px)) {
                 background-color: rgba(33, 33, 33, .8);
                 backdrop-filter: blur(5px);
@@ -126,6 +127,7 @@ export default {
         }
 
         .dark & {
+            background-color: var(--gray85);
             @supports (backdrop-filter: blur(5px)) {
                 background-color: rgba(33, 33, 33, .8);
                 backdrop-filter: blur(5px);
@@ -155,7 +157,7 @@ export default {
         }
         h1 {
             display: inline-block;
-            color: var(--night);
+            color: var(--gray10);
         }
     }
 
