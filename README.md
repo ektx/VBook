@@ -1,8 +1,9 @@
 # VBook
 
-make demo easy!
+Make Vue Demo Easy!!
 
-欢迎你使用 VBook 。 VBook 希望可以帮助你高效的书写 Vue 组件库文档。
+欢迎你使用 VBook。  
+VBook 希望可以帮助你高效的书写 Vue 组件库文档。
 
 ## 特性
 
@@ -78,6 +79,8 @@ export default {
 
 # FAQ
 
-Unknown version 76 of android
-
-打开报错信息位置，如：yarn/global/node_modules/parcel-bundler/node_modules/@babel/preset-env/node_modules/browserslist/index.js；打开此目录，删除 parcel-bundler/node_modules/@babel/preset-env/node_modules/browserslist 中的 browserslist 模块。
+<details>
+<summary>Unknown version 76 of android</summary>
+<p></p>
+<p>打开报错信息位置，如：yarn/global/node_modules/parcel-bundler/node_modules/@babel/preset-env/node_modules/browserslist/index.js；打开此目录，删除 parcel-bundler/node_modules/@babel/preset-env/node_modules/browserslist 中的 browserslist 模块。</p>
+</details>

@@ -1,6 +1,6 @@
 {
   "name": "@ektx/v-book",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "bin": {
     "vbook": "index.js"
   },
@@ -39,5 +39,5 @@
     ]
   },
   "license": "MIT",
-  "devDependencies": {}
+  "description": "Make Vue Demo Easy!!"
 }

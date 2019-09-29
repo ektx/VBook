@@ -40,11 +40,6 @@ module.exports = async function (name) {
     console.log('📝 生成目录文件！Create index.js...')
     
     fs.writeFileSync(indexPath, indexInner, {encoding: 'utf8'})
-    
-    // 创建引用文件
-    let mainFrom = path.join(process.cwd(), './index.js')
-    let mainLink = path.join(docRoot, './index.js')
-    createLink(mainFrom, mainLink)
   } else {
     let { overwritten } = await inquirer.prompt([{
       type: 'confirm',
@@ -58,6 +53,11 @@ module.exports = async function (name) {
       fs.writeFileSync(indexPath, indexInner, {encoding: 'utf8'})
     }
   }
+      
+  // 创建引用文件
+  let mainFrom = path.join(process.cwd(), './index.js')
+  let mainLink = path.join(docRoot, './index.js')
+  createLink(mainFrom, mainLink)
 
   console.log('⚙️  初始化中！Init Starting...')
 
