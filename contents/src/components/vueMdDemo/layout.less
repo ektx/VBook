@@ -1,18 +1,18 @@
 h1, h2, h3, h4, h5, h6, strong {
-    .markdown-it-com > & {
-        margin-top: 1em;
-        color: var(--gray10);
-        font-weight: 600;
-    }
+  .markdown-it-com > & {
+    margin-top: 1em;
+    color: var(--gray10);
+    font-weight: 600;
+  }
 }
 .markdown-it-com {
-    max-width: 900px;
+  max-width: 900px;
 
-    @media screen {
-        @media (min-width: 1500px) {
-            margin: 0 auto;
-        }
+  @media screen {
+    @media (min-width: 1500px) {
+      margin: 0 auto;
     }
+  }
 
     & > h1 {
         margin-block-end: 15px;
@@ -90,50 +90,64 @@ h1, h2, h3, h4, h5, h6, strong {
         color: var(--gray15);
 
         thead {
-            tr {
-                th {
-                    padding: 8px;
-                    font-size: 16px;
-                    text-align: left;
-                    vertical-align: bottom;
-                    border-bottom: 2px solid #ddd;
-                }
+          tr {
+            th {
+              padding: 8px;
+              font-size: 16px;
+              text-align: left;
+              vertical-align: bottom;
+              border-bottom: 2px solid #ddd;
             }
+          }
         }
         tbody {
-            tr {
-                td {
-                    padding: 8px;
-                    font-size: 14px;
-                    line-height: 1.4;
-                    vertical-align: top;
-                    border-bottom: 1px solid var(--gray90);
-                    transition: 
-                        background-color .4s ease-in-out,
-                        border-color .4s ease-in-out;
+          tr {
+            td {
+              padding: 8px;
+              font-size: 14px;
+              line-height: 1.4;
+              vertical-align: top;
+              border-bottom: 1px solid var(--gray90);
+              transition: 
+                background-color .4s ease-in-out,
+                border-color .4s ease-in-out;
 
-                    .dark & {
-                        border-bottom-color: var(--gray75);
-                    }
+              .DARK_td {
+                border-bottom-color: var(--gray75);
+              }
 
-                }
-                &:nth-child(2n) {
-                    td {
-                        background-color: var(--gray90);
-                        
-                        .dark & {
-                            background-color: var(--gray75);
-                        }
-                    }
-                }
+              .dark-scheme & {
+                .DARK_td
+              }
+              @media (prefers-color-scheme: dark) {
+                .DARK_td
+              }
+
             }
+            &:nth-child(2n) {
+              td {
+                background-color: var(--gray90);
+
+                .DARK_td2n {
+                  background-color: var(--gray75);
+                }
+                
+                .dark-scheme & {
+                  .DARK_td2n
+                }
+                @media (prefers-color-scheme: dark) {
+                  .DARK_td2n
+                }
+              }
+            }
+          }
         }
     }
 
-    // Emphasis
-    em {
-        font-style: italic;
-    }
+  // Emphasis
+  em {
+    font-style: italic;
+  }
 
     .vbook-warning-box,
     .vbook-error-box,

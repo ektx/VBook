@@ -153,10 +153,13 @@ export default {
     margin: 2em 0;
     border-radius: 3px;
     border: 1px solid var(--gray75);
+    transition: border-color .3s ease-in-out;
 
     .display-box {
         padding: 10px;
+        border-radius: 3px 3px 0 0;
         border-bottom: 1px solid var(--gray75);
+        background-color: #fff;
     }
 
     .source-box {
@@ -180,19 +183,23 @@ export default {
             text-align: center;
             border-top: 1px solid var(--gray75);
             background-color: #fff;
+            border-radius: 0 0 3px 3px;
             cursor: pointer;
             transition: 
                 color .3s ease-in-out,
                 background-color .3s ease-in-out;
 
-            .dark & {
+            .DARK_source-box--footer {
                 color: #aaa;
                 background-color: var(--gray75);
             }
 
+            .dark-scheme & {
+                .DARK_source-box--footer
+            }
+
             @media (prefers-color-scheme: dark) {
-                color: #aaa;
-                background-color: var(--gray75);
+                .DARK_source-box--footer
             }
 
             &:hover {
