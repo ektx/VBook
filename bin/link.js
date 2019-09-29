@@ -3,12 +3,16 @@ const execa = require('execa')
 const fs = require('fs-extra')
 const inquirer = require('inquirer')
 const homedir = require('os').homedir()
-const {hasYarn} = require('./env')
+const { hasYarn } = require('./env')
+
+let indexInner = require('../doc/index')
 
 /**
  * @param {string} name 项目文件名
  */
 module.exports = async function (name) {
+  // 在用户目录下创建一个完整的项目库
+  const docRoot = path.join(homedir, `.vbook/${name}`)
   // 提示用户是否使用淘宝镜像要安装依赖
   let { taobaoURL } = await inquirer.prompt([{
     type: 'confirm',
@@ -25,10 +29,37 @@ module.exports = async function (name) {
     execaArgs.push(TAOBAO_NPM_URL)
   }
 
-  console.log('⚙️  初始化中！Init Starting...')
+  // index.js 目录文件
+  let indexPath = path.join(process.cwd(), 'index.js')
+  let hasFile = fs.existsSync(indexPath)
 
-  // 在用户目录下创建一个完整的项目库
-  const docRoot = path.join(homedir, `.vbook/${name}`)
+  indexInner.title = name
+  indexInner = `export default ${JSON.stringify(indexInner, '', '  ')}`
+
+  if (!hasFile) {
+    console.log('📝 生成目录文件！Create index.js...')
+    
+    fs.writeFileSync(indexPath, indexInner, {encoding: 'utf8'})
+    
+    // 创建引用文件
+    let mainFrom = path.join(process.cwd(), './index.js')
+    let mainLink = path.join(docRoot, './index.js')
+    createLink(mainFrom, mainLink)
+  } else {
+    let { overwritten } = await inquirer.prompt([{
+      type: 'confirm',
+      name: 'overwritten',
+      message: 'the file already exists, whether it is overwriten'
+    }])
+  
+    if (overwritten) {
+      console.log('📝 更新目录文件！ Update index.js...')
+
+      fs.writeFileSync(indexPath, indexInner, {encoding: 'utf8'})
+    }
+  }
+
+  console.log('⚙️  初始化中！Init Starting...')
 
   // 设置当前项目库
   fs.ensureDirSync(docRoot, 0o2775)
@@ -38,7 +69,6 @@ module.exports = async function (name) {
   createLink(srcFrom, srcLink)
 
   // 创建共用包的符号链接
-  // TODO: 移入用户目录下的 .vbook 中
   let modFrom = path.join(docRoot, '../node_modules')
   fs.ensureDirSync(modFrom, 0o2775)
   let modLink = path.join(docRoot, './node_modules')
@@ -49,11 +79,6 @@ module.exports = async function (name) {
   let contentsLink = path.join(docRoot, 'contents')
   createLink(contents, contentsLink)
 
-  // 创建引用文件
-  let mainFrom = path.join(process.cwd(), './index.js')
-  let mainLink = path.join(docRoot, './index.js')
-  createLink(mainFrom, mainLink)
-  
   let postcssFrom = path.join(__dirname, '../postcss.config.js')
   let postcssLink = path.join(docRoot, './postcss.config.js')
   createLink(postcssFrom, postcssLink)
@@ -88,7 +113,7 @@ module.exports = async function (name) {
   })
 
   child.on('close', () => {
-    console.log('🎉 创建完成！Init Done!\n👉 Go on with: vbook run')
+    console.log('🎉 创建完成！Init Done!\n👉 Go on with: vbook run\n\n')
   })
 }
 

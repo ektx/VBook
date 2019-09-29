@@ -21,7 +21,7 @@
   .otherColor(error, #e41b17);
 }
 
-.light {
+.light-scheme {
   // 调用循环
   .lighten(100); 
   .normalColor
@@ -29,16 +29,16 @@
 
 @media (prefers-color-scheme: light) {
   :root {
-    .light   
+    .light-scheme  
   }
 }
 
-.dark {
+.dark-scheme {
   .darken(100); 
   .normalColor       
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    .dark      
+    .dark-scheme   
   }
 }
