@@ -27,7 +27,6 @@ cd doc
 vbook init
 
 # 运行
-# * 如果启动失败，再试一次
 vbook run
 
 # 帮助
