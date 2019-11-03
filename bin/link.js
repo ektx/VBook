@@ -44,7 +44,10 @@ module.exports = async function (name) {
     let { overwritten } = await inquirer.prompt([{
       type: 'confirm',
       name: 'overwritten',
-      message: 'the file already exists, whether it is overwriten'
+      // 提示用户目录中已经有 index.js 控制文件，是否需要重置
+      // 0.4.7以后默认为非重置
+      message: 'the file already exists, whether it is overwriten',
+      default: false
     }])
   
     if (overwritten) {
@@ -74,10 +77,10 @@ module.exports = async function (name) {
   let modLink = path.join(docRoot, './node_modules')
   createLink(modFrom, modLink)
 
-  // 创建渲染层的模板引用
-  let contents = path.join(__dirname, '../contents')
-  let contentsLink = path.join(docRoot, 'contents')
-  createLink(contents, contentsLink)
+  // 创建public 连接
+  let public = path.join(__dirname, '../contents/public')
+  let publicLink = path.join(docRoot, 'contents/public')
+  createLink(public, publicLink)
 
   let postcssFrom = path.join(__dirname, '../postcss.config.js')
   let postcssLink = path.join(docRoot, './postcss.config.js')
@@ -91,6 +94,14 @@ module.exports = async function (name) {
   fs.copySync(
     path.join(__dirname, '../package.json'),
     path.join(docRoot, 'package.json')
+  )
+  
+  // 创建渲染层的模板引用
+  // 独立的 src 目录可以方便用户自己配置或修改渲染页面效果
+  // 同时不会影响到其它的项目工程
+  fs.copySync(
+    path.join(__dirname, '../contents/src'),
+    path.join(docRoot, 'contents/src')
   )
   
   // 安装包依赖
