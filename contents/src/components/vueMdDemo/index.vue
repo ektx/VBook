@@ -81,9 +81,9 @@ export default {
   },
   computed: {
     HTML() {
-      let html = `<div class="markdown-it-com">${this.md.render(
-        this.value
-      )}</div>`;
+      let html = `<div class="markdown-it-com">${this.md.render(this.value)}</div>`;
+
+      html = html.replace('<p><ul class="markdownIt-TOC">', '<ul class="markdownIt-TOC">')
 
       let { render, staticRenderFns } = this.$compile(html);
 

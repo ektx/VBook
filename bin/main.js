@@ -57,8 +57,15 @@ module.exports = async function ({appName, version, ...opts}) {
  * @param {res} res 
  */
 function streamEvt (req, res) {
-	let file = path.join(process.cwd(), req.$file)
+	let file = ''
 
+	if (req.$file.includes('$$/')) {
+		file = path.join(__dirname, '../doc', req.$file.replace('$$/', ''))
+	} else {
+		file = path.join(process.cwd(), req.$file)
+	}
+
+	// 从用户自己的目录查找文件
 	fs.access(file, err => {
 		if (err) {
 			res.send(`:::error\n文件并不存在! ${file} \n:::`)
