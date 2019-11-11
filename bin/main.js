@@ -57,6 +57,7 @@ module.exports = async function ({appName, version, ...opts}) {
  * @param {res} res 
  */
 function streamEvt (req, res) {
+	console.log(req.$file)
 	let file = ''
 
 	if (req.$file.includes('$$/')) {
@@ -64,6 +65,7 @@ function streamEvt (req, res) {
 	} else {
 		file = path.join(process.cwd(), req.$file)
 	}
+	console.log('GET', path.basename(file), file)
 
 	// 从用户自己的目录查找文件
 	fs.access(file, err => {
