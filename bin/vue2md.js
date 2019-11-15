@@ -9,7 +9,6 @@ async function init() {
     type: 'input',
     name: 'filePath',
     message: '请输入你的 vue 文件地址',
-    default: '/Users/zhuwenlong/Sites/V5/VC/src/components/detailList/index.vue',
     validate(val) {
       val = val.trim()
 
@@ -145,9 +144,7 @@ function str2data (str) {
 
     // 取类型
     if (Array.isArray(type)) {
-      type = type.map(t => {
-        return t.name
-      })
+      type = type.map(t => t.name)
     } else {
       type = type.name
     }
