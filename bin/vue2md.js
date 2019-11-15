@@ -4,6 +4,7 @@ const inquirer = require('inquirer')
 const chalk = require('chalk')
 
 async function init() {
+  let docLinst = []
   let { filePath } = await inquirer.prompt([{
     type: 'input',
     name: 'filePath',
@@ -26,7 +27,8 @@ async function init() {
 
   filePath = filePath.trim()
 
-  console.log(filePath)
+  console.log(`📃`, filePath)
+
   let fileInner = await fs.readFile(filePath, 'utf8')
   let fileLines = fileInner.split(/\r|\n/)
   // 用于记录是否开启了props字段截取功能
@@ -56,19 +58,20 @@ async function init() {
     ) {
       propsStart = 1
     }
-    
+    // 如果已经开启了props的记录时
     else if (propsStart) {
-
+      // 每次发现 { 我们认为中 props 内的对象
+      // 层级上升一级
       if (lineStr.includes('{')) {
         propsStart++
-
-
       } 
+      // 每次发现 } 时，正好与上次的 { 匹配，此时层级回退一级
       if (lineStr.includes('}')) {
-        // console.log('End', commentTem)
         propsStart--
 
-        if (commentTem.step < 0) {
+        // 在回退到一级时，当step为-1时，为注释结束，
+        // 此时我们将注释添加到当前的props中
+        if (commentTem.step < 0 && propsStart === 1) {
           // 如果是行内注释
           if (commentTem.type === 'line') {
             propsString += `, description:' ${commentTem.inner}'`
@@ -76,12 +79,11 @@ async function init() {
             // 如果字符串有单引号，默认转换成双引号
             propsString += `, description:' ${commentTem.inner.replace(/\'/g, '"')}'`
           }
-          
+          // 清空之前的数据
           commentTem.step = 0
           commentTem.inner = ''
         }
       }
-      console.log(i, lineStr, propsStart)
       
       // 如果 propsStart 大于0;保存数据
       if (propsStart) {
@@ -102,7 +104,7 @@ async function init() {
             commentTem.inner += lineStr.replace(/\*+\/$/, '')
           }
           else {
-            commentTem.inner += lineStr.replace(/^\*+/, '')
+            commentTem.inner += lineStr
             commentTem.step++
           }
         } else if (lineStr.startsWith('//')) {
@@ -120,19 +122,61 @@ async function init() {
     }
   }
 
-  console.log(generateMD(propsString))
+  let arr = str2data(propsString)
+  console.log( generateMD({
+    name: 'Props', 
+    data: arr
+  }))
 }
 
 init()
 
 /**
- * 生成 markdown 文档
- * @param {string} props vue props 内容
+ * 将对象字符串转换成对象
+ * @param {string} str 对象字符串
  */
-function generateMD(propsStr) {
-  console.log(propsStr)
+function str2data (str) {
+  let props = Function(`return {${str}}`)()
+  let result = []
+
+  // 处理 props
+  for (let key in props) {
+    let {type, description, default: defaultVal} = props[key]
+
+    // 取类型
+    if (Array.isArray(type)) {
+      type = type.map(t => {
+        return t.name
+      })
+    } else {
+      type = type.name
+    }
+
+    // 取默认值
+    if (typeof defaultVal === 'function') {
+      defaultVal = defaultVal()
+    }
+
+    result.push({
+      label: key,
+      type,
+      description,
+      default: defaultVal
+    })
+  }
+
+  return result
+}
+
+/**
+ * 生成 markdown 文档
+ * @param {string} name 标题
+ * @param {string} data vue props 内容
+ * @param {number} level 级别
+ */
+function generateMD({name = '', data, level = 1}) {
+  console.log(data)
   // 转换成 js 对象，并取值 props
-  let props = Function(`return {${propsStr}}`)()
   let mkObj = {
     // markdown文档标题
     header: [
@@ -160,38 +204,13 @@ function generateMD(propsStr) {
     data: []
   }
 
-  // 处理 props
-  for (let key in props) {
-    let {type, description, default: defaultVal} = props[key]
-
-    // 取类型
-    if (Array.isArray(type)) {
-      type = type.map(t => {
-        return t.name
-      })
-    } else {
-      type = type.name
-    }
-
-    // 取默认值
-    if (typeof defaultVal === 'function') {
-      defaultVal = defaultVal()
-    }
-
-    mkObj.data.push({
-      label: key,
-      type,
-      description,
-      default: defaultVal
-    })
-  }
-
   // 文档内容
   let mkInner = ''
   // 标题内容
   let titleStr = ''
   // 对齐方式
   let alignStr = ''
+  let children = ''
 
   // 生成标题与对齐方式
   for (let i = 0; i < mkObj.header.length; i++) {
@@ -203,19 +222,19 @@ function generateMD(propsStr) {
   mkInner = `|${titleStr}\r\n|${alignStr}\r\n`
 
   // 生成文档
-  for (let i = 0; i < mkObj.data.length; i++) {
+  for (let i = 0; i < data.length; i++) {
     let item = ''
 
     for (let j = 0; j < mkObj.header.length; j++) {
       let { key } = mkObj.header[j]
-      let val = mkObj.data[i][key] || ''
+      let val = data[i][key] || ''
 
       switch (key) {
         case 'label':
           item += `| **${val}** `
           break
         case 'type':
-          console.log(chalk.white(Array.isArray(val)))
+          // 优化对多个属性展示效果
           if (Array.isArray(val)) {
             val = val.join('|')
           }
@@ -229,9 +248,20 @@ function generateMD(propsStr) {
           item += `| ${val} `
           break
         case 'description':
+          if (val.includes('@resolve')) {
+            let [first, end] = val.split('@resolve')
+            val = first
+            val = val.replace(/\*/g, '')
+
+            // 解析注释内容
+            children = resolveString(data[i].label, end, level+1)
+          } else {
+            val = val.replace(/\*/g, '<br/>')
+          }
+
           // 处理markdown中对|的安全处理 | => \|
           val = val.replace(/\|/g, '\\|')
-          item += `| ${val}`
+          item += `| ${val.trim()} `
           break
         default:
           item += `|${val} `
@@ -241,5 +271,38 @@ function generateMD(propsStr) {
     mkInner += `${item} |\r\n`
   }
 
-  return mkInner
+  return `${'#'.repeat(level)} ${name} \r\n${mkInner}\r\n` + children
+}
+
+/**
+ * 解析注释内容
+ * @param {string} name 名称
+ * @param {string} val 字符串内容
+ * @param {number} level 字符串内容
+ */
+function resolveString (name, val, level) {
+  let arr = val.split(/\*/)
+  let result = []
+
+  for (let i = 0; i < arr.length; i++) {
+    // 处理类似 'label: {String}' 标题 的内容
+    if (/{(.+)}/.test(arr[i])) {
+      // 先取出类型
+      let type = arr[i].match(/{.+?}/)[0]
+      // 以取出的类型进行分隔
+      let [label, description] = arr[i].split(type)
+      
+      result.push({
+        label: label.trim().replace(/(\W+)$/, ''),
+        type,
+        description: description.trim()
+      })
+    }
+  }
+
+  return generateMD({
+    name,
+    level,
+    data: result
+  })
 }
