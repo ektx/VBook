@@ -172,7 +172,6 @@ function str2data (str) {
  * @param {number} level 级别
  */
 function generateMD({name = '', data, level = 1}) {
-  console.log(data)
   // 转换成 js 对象，并取值 props
   let mkObj = {
     // markdown文档标题
