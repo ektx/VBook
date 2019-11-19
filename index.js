@@ -5,6 +5,7 @@ const path = require('path')
 const package = require('./package.json')
 const main = require('./bin/main')
 const link = require('./bin/link')
+const build = require('./bin/build')
 const version = package.version
 const appPathArr = process.cwd().split(path.sep)
 const appName = appPathArr[appPathArr.length -2]
@@ -35,6 +36,13 @@ program
     }
 
     main({...cmd, appName, version})
+  })
+
+program
+  .command('build')
+  .description('build the docs')
+  .action(cmd => {
+    build({appName})
   })
 
 program.on('--help', function () {
