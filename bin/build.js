@@ -61,6 +61,7 @@ function buildEvt (outDir, appName) {
     outDir,
     outFile: 'index.html',
     cacheDir: path.join(appPath, 'cache'),
+    publicUrl: './',
     minify: true,
     hmr: false
   }
