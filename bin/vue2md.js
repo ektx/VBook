@@ -4,7 +4,6 @@ const inquirer = require('inquirer')
 const chalk = require('chalk')
 
 async function init() {
-  let docLinst = []
   let { filePath } = await inquirer.prompt([{
     type: 'input',
     name: 'filePath',
@@ -30,6 +29,7 @@ async function init() {
 
   let fileInner = await fs.readFile(filePath, 'utf8')
   let fileLines = fileInner.split(/\r|\n/)
+  let scriptStart = -1
   // 用于记录是否开启了props字段截取功能
   let propsStart = 0
   let propsString = ''
@@ -49,11 +49,16 @@ async function init() {
     
     lineStr = lineStr.trim()
 
+    if (lineStr.startsWith('<script')) {
+      scriptStart = i
+    }
+
     // 如果字段开始是props我们开始记录
     // 且propsStart为0时
     if (
       lineStr.startsWith('props') 
-      && !propsStart
+      && !propsStart &&
+      scriptStart > -1
     ) {
       propsStart = 1
     }
@@ -67,6 +72,9 @@ async function init() {
       // 每次发现 } 时，正好与上次的 { 匹配，此时层级回退一级
       if (lineStr.includes('}')) {
         propsStart--
+
+        // 强制结束对 props 的追踪
+        if (!propsStart) scriptStart = -1
 
         // 在回退到一级时，当step为-1时，为注释结束，
         // 此时我们将注释添加到当前的props中
