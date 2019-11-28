@@ -160,6 +160,8 @@ function str2data (str) {
     // 取默认值
     if (typeof defaultVal === 'function') {
       defaultVal = defaultVal()
+    } else {
+      defaultVal = String(defaultVal)
     }
 
     result.push({
