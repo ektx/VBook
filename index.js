@@ -6,6 +6,7 @@ const package = require('./package.json')
 const main = require('./bin/main')
 const link = require('./bin/link')
 const build = require('./bin/build')
+const generateDoc = require('./bin/generateDoc')
 const version = package.version
 const appPathArr = process.cwd().split(path.sep)
 const appName = appPathArr[appPathArr.length -2]
@@ -15,16 +16,24 @@ program
 
 program
   .command('init')
-  .description('set vbook link')
+  .description('设置项目链接')
   .action(() => {
     link(appName)
   })
 
+
+program
+  .command('doc')
+  .description('选择 vue 文件生成 markdown 文件')
+  .action(() => {
+    generateDoc()
+  })
+
 program
   .command('run')
-  .description('start the service')
-  .option('-p, --port [port]', 'serve port, default: 8888')
-  .option('-s, --https', 'use HTTPS, default HTTP')
+  .description('启动文档服务')
+  .option('-p, --port [port]', '服务商品，默认 8888')
+  .option('-s, --https', '使用HTTPS服务，默认为HTTP')
   .action(cmd => {
     // 重置端口
     let port = parseInt(cmd.port)
@@ -40,8 +49,8 @@ program
 
 program
   .command('build')
-  .description('build the docs')
-  .action(cmd => {
+  .description('生成发布所需文档')
+  .action(() => {
     build({appName})
   })
 
@@ -51,8 +60,8 @@ program.on('--help', function () {
 
   Quick Start: vbook
 
-  Use Option:
-  > vbook -p 8888
+  Use Option:\n
+    > vbook -p 8888
   `)
 })
 

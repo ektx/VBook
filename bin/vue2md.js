@@ -3,25 +3,25 @@ const fs = require('fs-extra')
 const inquirer = require('inquirer')
 const chalk = require('chalk')
 
-async function init() {
-  let { filePath } = await inquirer.prompt([{
-    type: 'input',
-    name: 'filePath',
-    message: '请输入你的 vue 文件地址',
-    validate(val) {
-      val = val.trim()
+async function init(filePath) {
+  // let { filePath } = await inquirer.prompt([{
+  //   type: 'input',
+  //   name: 'filePath',
+  //   message: '请输入你的 vue 文件地址',
+  //   validate(val) {
+  //     val = val.trim()
 
-      if (path.extname(val) !== '.vue') {
-        return '文件不是vue文件'
-      }
+  //     if (path.extname(val) !== '.vue') {
+  //       return '文件不是vue文件'
+  //     }
 
-      if (!fs.existsSync(val)) {
-        return '没有发现文件'
-      }
+  //     if (!fs.existsSync(val)) {
+  //       return '没有发现文件'
+  //     }
 
-      return true
-    }
-  }])
+  //     return true
+  //   }
+  // }])
 
   filePath = filePath.trim()
 
@@ -135,8 +135,6 @@ async function init() {
     data: arr
   }))
 }
-
-init()
 
 /**
  * 将对象字符串转换成对象
@@ -312,3 +310,5 @@ function resolveString (name, val, level) {
     data: result
   })
 }
+
+module.exports = init
