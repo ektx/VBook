@@ -2,11 +2,11 @@
 const chalk = require('chalk');
 const cliCursor = require('cli-cursor');
 const path = require('path');
-const dirTree = require('directory-tree');
-const {takeUntil, takeWhile} = require('rxjs/operators');
 const Base = require('inquirer/lib/prompts/base');
 const observe = require('inquirer/lib/utils/events');
 const Paginator = require('inquirer/lib/utils/paginator');
+const {takeUntil, take, map} = require('rxjs/operators')
+const dirFiles = require('./directoryFiles')
 
 /**
  * type: string
@@ -16,20 +16,8 @@ class FileTreeSelectionPrompt extends Base {
   constructor(questions, rl, answers) {
     super(questions, rl, answers);
 
-    this.fileTree = dirTree(path.resolve(process.cwd(), this.opt.root || '.'))
-    this.fileTree.children = this.fileTree.children || []
-
-    this.fileTree.children.unshift({
-      path: process.cwd(),
-      type: 'directory',
-      isCurrentDirectory: true,
-      name: '.(CURRENT DIRECTORY)'
-    })
-
+    this.setFileTree(path.resolve(process.cwd(), '.'))
     this.shownList = []
-
-    this.firstRender = true;
-    this.selected = this.fileTree.children[0];
 
     this.opt = {
       ...{
@@ -40,15 +28,15 @@ class FileTreeSelectionPrompt extends Base {
       ...this.opt
     }
 
-    console.log(this.opt)
+    // console.log(this.opt)
 
     // Make sure no default is set (so it won't be printed)
-    this.opt.default = null;
+    this.opt.default = null
     this.opt.pageSize = 10
 
     this.paginator = new Paginator(this.screen);
   }
-
+ 
   /**
    * Start the Inquiry session
    * @param  {Function} cb  Callback when prompt is done
@@ -60,61 +48,65 @@ class FileTreeSelectionPrompt extends Base {
 
     var events = observe(this.rl);
 
-    const dontHaveAnswer = () => !this.answers;
-
-    events.normalizedUpKey
+    events.keypress
       .pipe(takeUntil(events.line))
-      .forEach(this.onUpKey.bind(this));
-    events.normalizedDownKey
-      .pipe(takeUntil(events.line))
-      .forEach(this.onDownKey.bind(this));
-    events.spaceKey
-      .pipe(takeUntil(events.line))
-      .forEach(this.onSpaceKey.bind(this));
+      .forEach(this.onKeypress.bind(this));
 
     events.line
-      // .pipe(takeUntil(events.line))
-      .forEach(this.onSubmit.bind(this));
+      .pipe(
+        take(1),
+        map(this.getCurrentValue.bind(this))
+      )
+      .forEach(this.onSubmit.bind(this))
 
     cliCursor.hide();
-    if (this.firstRender) {
-      this.render();
-    }
+    this.render();
 
     return this;
   }
 
   renderFileTree(root = this.fileTree, indent = 2) {
-    const children = root.children || []
+    const children = root || []
     let output = ''
 
     children.forEach(itemPath => {
-      if (this.opt.onlyShowDir && itemPath.type !== 'directory') {
-        return
-      }
-
       this.shownList.push(itemPath)
-      let prefix = itemPath.children
-        ? itemPath.open ? '- ' : '+ '
-        : ''
+
+      let prefix = itemPath.isDir ? '+ ' : ''
       let showValue = ''
 
       if (itemPath === this.selected) {
         // 调整添加下划线与颜色来显示当前的选项
         showValue = chalk.cyan.underline(itemPath.name)
-      }
-      else {
+      } else {
         showValue = itemPath.name
       }
-      // 
+
       output += ' '.repeat(prefix ? indent - 2: indent) + prefix + showValue + '\n'
 
-      if (itemPath.open) {
-        output += this.renderFileTree(itemPath, indent + 2)
-      }
     })
 
     return output
+  }
+
+  setFileTree (pathLike = process.cwd()) {
+    let parentPath = path.join(pathLike, '../')
+    this.fileTree = dirFiles(path.resolve(pathLike))
+
+    this.fileTree.unshift({
+      path: pathLike,
+      isDir: false,
+      special: true,
+      name: '.(当前目录)'
+    }, {
+      path: parentPath,
+      isDir: false,
+      special: true,
+      name: '..(上级目录)'
+    })
+
+    this.selected = this.fileTree[0]
+
   }
 
   /**
@@ -124,11 +116,9 @@ class FileTreeSelectionPrompt extends Base {
 
   render() {
     // Render question
-    var message = this.getQuestion();
+    let message = this.getQuestion()
 
-    if (this.firstRender) {
-      message += chalk.dim('(Use arrow keys, Use space to toggle folder)');
-    }
+    message += chalk.dim('(使用上下箭头选择文件，使用Tab进入文件夹)')
 
     if (this.status === 'answered') {
       message += chalk.cyan(this.selected.path)
@@ -144,7 +134,6 @@ class FileTreeSelectionPrompt extends Base {
       )
     }
 
-    this.firstRender = false;
     this.screen.render(message);
   }
 
@@ -152,23 +141,25 @@ class FileTreeSelectionPrompt extends Base {
    * When user press `enter` key
    */
 
-  onSubmit(line) {
-    if (typeof this.opt.validate === 'function') {
-      let validateResult = this.opt.validate(line)
+  onSubmit(value) {
+    // console.log('>>>', value)
+    // if (typeof this.opt.validate === 'function') {
+    //   let validateResult = this.opt.validate(value)
 
-      if (validateResult !== true) {
-        console.log('eeee')
-      }
-      return
-    }
+    //   if (validateResult !== true) {
+    //     console.log('eeee')
+    //     this.render()
+    //   }
+    //   return
+    // }
     this.status = 'answered';
 
-    // this.render();
+    this.render();
 
-    // this.screen.done();
-    // cliCursor.show();
+    this.screen.done();
+    cliCursor.show();
     // 调整提交完整的文件信息
-    this.done(line);
+    this.done(value);
   }
 
   moveselected(distance = 0) {
@@ -185,6 +176,10 @@ class FileTreeSelectionPrompt extends Base {
     this.selected = this.shownList[index]
 
     this.render()
+  }
+
+  getCurrentValue() {
+    return this.selected
   }
 
   /**
@@ -205,6 +200,25 @@ class FileTreeSelectionPrompt extends Base {
 
     this.selected.open = !this.selected.open
     this.render()
+  }
+
+  /**
+   * 
+   * @param {object} e {key: {name: string}, value: string}
+   */
+  onKeypress(e) {
+    let keyName = (e.key && e.key.name) || undefined
+
+    if (keyName === 'tab') {
+      if (this.selected.isDir || this.selected.special) {
+        this.setFileTree(this.selected.path)
+        this.render()
+      }
+    } else if (keyName === 'down') {
+      this.moveselected(1)
+    } else if (keyName === 'up') {
+      this.moveselected(-1)
+    }
   }
 }
 
