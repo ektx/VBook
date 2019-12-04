@@ -1,17 +1,22 @@
-// https://github.com/anc95/inquirer-file-tree-selection
-const chalk = require('chalk');
-const cliCursor = require('cli-cursor');
-const path = require('path');
-const Base = require('inquirer/lib/prompts/base');
-const observe = require('inquirer/lib/utils/events');
-const Paginator = require('inquirer/lib/utils/paginator');
-const {takeUntil, take, map} = require('rxjs/operators')
+const path = require('path')
+const chalk = require('chalk')
+const cliCursor = require('cli-cursor')
+const Base = require('inquirer/lib/prompts/base')
+const Paginator = require('inquirer/lib/utils/paginator')
+const observe = require('inquirer/lib/utils/events')
+const {takeUntil, map, take} = require('rxjs/operators')
 const dirFiles = require('./directoryFiles')
 
-/**
- * type: string
- * onlyShowDir: boolean (default: false)
- */
+function mask(input, maskChar) {
+  input = String(input);
+  maskChar = typeof maskChar === 'string' ? maskChar : '*';
+  if (input.length === 0) {
+    return '';
+  }
+
+  return new Array(input.length + 1).join(maskChar);
+}
+
 class FileTreeSelectionPrompt extends Base {
   constructor(questions, rl, answers) {
     super(questions, rl, answers);
@@ -28,18 +33,16 @@ class FileTreeSelectionPrompt extends Base {
       ...this.opt
     }
 
-    // console.log(this.opt)
-
     // Make sure no default is set (so it won't be printed)
     this.opt.default = null
     this.opt.pageSize = 10
 
     this.paginator = new Paginator(this.screen);
   }
- 
+
   /**
    * Start the Inquiry session
-   * @param  {Function} cb  Callback when prompt is done
+   * @param  {Function} cb      Callback when prompt is done
    * @return {this}
    */
 
@@ -48,21 +51,54 @@ class FileTreeSelectionPrompt extends Base {
 
     var events = observe(this.rl);
 
+    // Once user confirm (enter key)
+    var submit = events.line
+      .pipe(map(this.filterInput.bind(this)))
+
+    var validation = this.handleSubmitEvents(submit);
+    validation.success.forEach(this.onEnd.bind(this));
+    validation.error.forEach(this.onError.bind(this));
+
     events.keypress
-      .pipe(takeUntil(events.line))
+      .pipe(takeUntil(validation.success))
       .forEach(this.onKeypress.bind(this));
 
-    events.line
-      .pipe(
-        take(1),
-        map(this.getCurrentValue.bind(this))
+    cliCursor.hide()
+    this.render()
+
+    return this
+  }
+
+  /**
+   * Render the prompt to screen
+   * @return {FileTreeSelectionPrompt} self
+   */
+
+  render(error) {
+    // console.trace(error)
+    var message = this.getQuestion();
+    var bottomContent = '';
+
+    if (this.status === 'answered') {
+      message += chalk.cyan(this.selected.path)
+    } else {
+      message += chalk.dim('(使用上下箭头选择文件，使用Tab进入文件夹)')
+
+      this.shownList = []
+      const fileTreeStr = this.renderFileTree()
+
+      message += '\n' + this.paginator.paginate(
+        fileTreeStr + '----------------------------------', 
+        this.shownList.indexOf(this.selected), 
+        this.opt.pageSize
       )
-      .forEach(this.onSubmit.bind(this))
+    }
 
-    cliCursor.hide();
-    this.render();
+    if (error) {
+      bottomContent = '\n' + chalk.red('❌ ') + error;
+    }
 
-    return this;
+    this.screen.render(message, bottomContent);
   }
 
   renderFileTree(root = this.fileTree, indent = 2) {
@@ -106,60 +142,31 @@ class FileTreeSelectionPrompt extends Base {
     })
 
     this.selected = this.fileTree[0]
-
-  }
-
-  /**
-   * Render the prompt to screen
-   * @return {FileTreeSelectionPrompt} self
-   */
-
-  render() {
-    // Render question
-    let message = this.getQuestion()
-
-    message += chalk.dim('(使用上下箭头选择文件，使用Tab进入文件夹)')
-
-    if (this.status === 'answered') {
-      message += chalk.cyan(this.selected.path)
-    }
-    else {
-      this.shownList = []
-      const fileTreeStr = this.renderFileTree()
-
-      message += '\n' + this.paginator.paginate(
-        fileTreeStr + '----------------------------------', 
-        this.shownList.indexOf(this.selected), 
-        this.opt.pageSize
-      )
-    }
-
-    this.screen.render(message);
   }
 
   /**
    * When user press `enter` key
    */
 
-  onSubmit(value) {
-    // console.log('>>>', value)
-    // if (typeof this.opt.validate === 'function') {
-    //   let validateResult = this.opt.validate(value)
+  filterInput () {
+    return this.selected.path
+  }
 
-    //   if (validateResult !== true) {
-    //     console.log('eeee')
-    //     this.render()
-    //   }
-    //   return
-    // }
+  onEnd(state) {
+    console.log('End:', state)
     this.status = 'answered';
+    this.answer = state.value;
 
-    this.render();
+    // Re-render prompt
+    // this.render();
 
     this.screen.done();
-    cliCursor.show();
-    // 调整提交完整的文件信息
-    this.done(value);
+    this.done(state.value);
+  }
+
+  onError(state) {
+    console.log('Error:', state)
+    this.render(state.isValid);
   }
 
   moveselected(distance = 0) {
@@ -178,34 +185,6 @@ class FileTreeSelectionPrompt extends Base {
     this.render()
   }
 
-  getCurrentValue() {
-    return this.selected
-  }
-
-  /**
-   * When user press a key
-   */
-  onUpKey() {
-    this.moveselected(-1)
-  }
-
-  onDownKey() {
-    this.moveselected(1)
-  }
-
-  onSpaceKey() {
-    if (!this.selected.children) {
-      return
-    }
-
-    this.selected.open = !this.selected.open
-    this.render()
-  }
-
-  /**
-   * 
-   * @param {object} e {key: {name: string}, value: string}
-   */
   onKeypress(e) {
     let keyName = (e.key && e.key.name) || undefined
 

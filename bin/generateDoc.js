@@ -1,3 +1,4 @@
+const path = require('path')
 const inquirer = require('inquirer')
 const vue2md = require('./vue2md')
 const getFileTree = require('./getFileTree')
@@ -12,8 +13,7 @@ module.exports = function () {
         name: 'file',
         message: '选择你要使用的 vue 文件',
         validate (val) {
-          console.log(val)
-          if (val.extension !== '.vue') {
+          if (path.extname(val) !== '.vue') {
             return '文件不是vue文件'
           }
   
