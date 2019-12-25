@@ -75,11 +75,3 @@ export default {
   ]
 }
 ```
-
-# FAQ
-
-<details>
-<summary>Unknown version 76 of android</summary>
-<p></p>
-<p>打开报错信息位置，如：yarn/global/node_modules/parcel-bundler/node_modules/@babel/preset-env/node_modules/browserslist/index.js；打开此目录，删除 parcel-bundler/node_modules/@babel/preset-env/node_modules/browserslist 中的 browserslist 模块。</p>
-</details>
