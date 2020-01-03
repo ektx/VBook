@@ -21,7 +21,6 @@ module.exports = function () {
         }
       }
     ]).then(answers => {
-      console.log(JSON.stringify(answers, '', '  '))
-      // vue2md(answers.file.path)
+      vue2md(answers.file)
     })
 }
