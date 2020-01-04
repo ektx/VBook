@@ -30,9 +30,13 @@ export default {
       highlight(str, lang) {
         if (lang && hljs.getLanguage(lang)) {
           try {
+            let code = hljs.highlight(lang, str, true).value
+
+            code = code.replace(/<span class="hljs-symbol">&amp;#123;/g, '<span>{')
+
             return (
               `<pre class="hljs"><code>` +
-              hljs.highlight(lang, str, true).value +
+              code +
               "</code></pre>"
             );
           } catch (__) {}
