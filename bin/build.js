@@ -43,7 +43,6 @@ module.exports = async function ({appName}) {
 
   // 设置路由的 base 地址
   process.env.BASE_URL = baseURL
-  console.log(savePath, baseURL, overwrite)
 
   if (overwrite) {
     await fs.emptyDir(savePath)
