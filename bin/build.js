@@ -23,12 +23,12 @@ module.exports = async function ({appName}) {
   ])
   // 设置环境为生产环境
   process.env.NODE_ENV = 'production'
-
+  
   // 获取文件的绝对地址
   if (!path.isAbsolute(savePath)) {
     savePath = path.join(process.cwd(), savePath)
   }
-
+  
   // 判断文件夹是否已经存在，存在时提示用户是覆盖还是取消进程
   if (fs.existsSync(savePath)) {
     answer = await inquirer.prompt([{
@@ -43,13 +43,13 @@ module.exports = async function ({appName}) {
 
   // 设置路由的 base 地址
   process.env.BASE_URL = baseURL
+  console.log(savePath, baseURL, overwrite)
 
   if (overwrite) {
     await fs.emptyDir(savePath)
-
-    buildEvt(savePath, appName)
   }
-
+  
+  buildEvt(savePath, appName)
 }
 
 function buildEvt (outDir, appName) {
