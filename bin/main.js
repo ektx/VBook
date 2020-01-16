@@ -9,7 +9,7 @@ const homedir = require('os').homedir()
 module.exports = async function ({appName, version, ...opts}) {
 	const appPath = path.join(homedir, `.vbook/${appName}`)
 	// 入口文件地址
-	const entryFiles = path.join(appPath, 'contents/public/index.html')
+	const entryFiles = path.join(appPath, 'public/index.html')
 	let servered = false
 
 	const options = {
@@ -38,21 +38,16 @@ module.exports = async function ({appName, version, ...opts}) {
 
 	app.use(bundler.middleware())
 
-	bundler.on('buildStart', entryPoints => {
-
-	})
-
 	bundler.on('bundled', () => {
 		if (servered) return
 
 		servered = true
 		startServe(app, opts.port)
 	})
-	
 }
 
 /**
- * 文件浪服务
+ * 文件流服务
  * @param {req} req 
  * @param {res} res 
  */

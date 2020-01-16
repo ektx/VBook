@@ -2,7 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import App from './App.vue'
 import router from './router/'
-import  MyLib from '../../src/'
+import  MyLib from '../MY_COMPONENTS'
 import 'highlight.js/styles/vs.css'
 
 // 你在本示例中要使用的组件库

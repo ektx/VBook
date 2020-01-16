@@ -26,7 +26,7 @@
 <script>
 import MarkdownIt from "../../components/vueMdDemo";
 import Navs from "../../components/navs";
-import info from "../../../../index.js";
+import info from "../../../index.js";
 
 export default {
   name: "home",

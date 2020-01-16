@@ -38,7 +38,7 @@
   },
   "staticFiles": {
     "staticPath": [
-      "contents/public"
+      "public"
     ]
   },
   "license": "MIT",
