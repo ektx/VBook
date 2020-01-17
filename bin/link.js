@@ -129,10 +129,12 @@ async function init (name, docRoot) {
   // 创建渲染层的模板引用
   // 独立的 src 目录可以方便用户自己配置或修改渲染页面效果
   // 同时不会影响到其它的项目工程
-  fs.copySync(
-    path.join(__dirname, '../contents/src'),
-    path.join(docRoot, 'src')
-  )
+  let vbookSrc = path.join(__dirname, '../contents/src')
+  let homeSrc = path.join(docRoot, 'src')
+  let uiSrc = path.join(process.cwd(), '.vbook/src')
+
+  fs.copySync(vbookSrc, homeSrc)
+  createLink(homeSrc, uiSrc)
   
   // 安装包依赖
   console.log('🚚 处理相关依赖...')
