@@ -71,6 +71,8 @@ function createIndexFile (name) {
       console.log('📝 生成目录文件！Create index.js...')
       
       fs.writeFileSync(indexPath, indexInner, {encoding: 'utf8'})
+
+      resolve()
     } else {
       inquirer.prompt([{
         type: 'confirm',
