@@ -1,28 +1,11 @@
-const path = require('path')
 const fs = require('fs-extra')
-const inquirer = require('inquirer')
-const chalk = require('chalk')
 
+/**
+ * 根据用户提供的 vue 文件
+ * 输出 markdwon 文档
+ * @param {string} filePath vue文件地址
+ */
 async function init(filePath) {
-  // let { filePath } = await inquirer.prompt([{
-  //   type: 'input',
-  //   name: 'filePath',
-  //   message: '请输入你的 vue 文件地址',
-  //   validate(val) {
-  //     val = val.trim()
-
-  //     if (path.extname(val) !== '.vue') {
-  //       return '文件不是vue文件'
-  //     }
-
-  //     if (!fs.existsSync(val)) {
-  //       return '没有发现文件'
-  //     }
-
-  //     return true
-  //   }
-  // }])
-
   filePath = filePath.trim()
 
   console.log(`📃`, filePath)
@@ -57,8 +40,8 @@ async function init(filePath) {
     // 且propsStart为0时
     if (
       lineStr.startsWith('props') 
-      && !propsStart &&
-      scriptStart > -1
+      && !propsStart 
+      && scriptStart > -1
     ) {
       propsStart = 1
     }
@@ -115,8 +98,11 @@ async function init(filePath) {
             commentTem.step++
           }
         } else if (lineStr.startsWith('//')) {
+          let oldInner = commentTem.inner
+          let newInner = lineStr.slice(2).trim()
+
           commentTem = {
-            inner: lineStr.slice(2).trim(),
+            inner: oldInner ? `${oldInner}<br/>${newInner}` : newInner,
             step: -1,
             type: 'line'
           }
@@ -141,6 +127,7 @@ async function init(filePath) {
  * @param {string} str 对象字符串
  */
 function str2data (str) {
+  console.log(str)
   let props = Function(`return {${str}}`)()
   let result = []
 

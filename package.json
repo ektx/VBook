@@ -42,5 +42,8 @@
     ]
   },
   "license": "MIT",
-  "description": "Make Vue Demo Easy!!"
+  "description": "Make Vue Demo Easy!!",
+  "devDependencies": {
+    "jest": "^25.1.0"
+  }
 }
