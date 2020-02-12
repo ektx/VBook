@@ -8,7 +8,7 @@ const fs = require('fs-extra')
 async function init(filePath) {
   filePath = filePath.trim()
 
-  console.log(`📃`, filePath)
+  console.log(`📃 VUE文件地址为：`, filePath)
 
   let fileInner = await fs.readFile(filePath, 'utf8')
   let fileLines = fileInner.split(/\r|\n/)
@@ -116,6 +116,9 @@ async function init(filePath) {
   }
 
   let arr = str2data(propsString)
+
+  console.log('🎉 Markdown 文档生成如下：')
+
   console.log( generateMD({
     name: 'Props', 
     data: arr
@@ -127,7 +130,6 @@ async function init(filePath) {
  * @param {string} str 对象字符串
  */
 function str2data (str) {
-  console.log(str)
   let props = Function(`return {${str}}`)()
   let result = []
 
