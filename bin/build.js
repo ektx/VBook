@@ -54,7 +54,7 @@ module.exports = async function ({appName}) {
 function buildEvt (outDir, appName) {
   const appPath = path.join(homedir, `.vbook/${appName}`)
 	// 入口文件地址
-  const entryFiles = path.join(appPath, 'contents/public/index.html')
+  const entryFiles = path.join(appPath, 'public/index.html')
   
   const opts = {
     outDir,
@@ -62,6 +62,7 @@ function buildEvt (outDir, appName) {
     cacheDir: path.join(appPath, 'cache'),
     publicUrl: './',
     minify: true,
+    sourceMaps: false,
     hmr: false
   }
 
