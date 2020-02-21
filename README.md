@@ -1,5 +1,7 @@
 # VBook
 
+[TOC]
+
 Make Vue Demo Easy!!
 
 欢迎你使用 VBook。  
@@ -7,7 +9,7 @@ VBook 希望可以帮助你高效的书写 Vue 组件库文档。
 
 ## 特性
 
-- 简单易用。markdown 语法支持与扩展，让你可以写出更好更快的文档与效果。
+- 简单易用。
 - 快速搭建自己的 Vue 组件或示例的文档。
 - 灵活的定制化，可以自己调整风格与主题。
 
@@ -75,3 +77,11 @@ export default {
   ]
 }
 ```
+
+## 兼容性
+
+| Chrome | Firefox |  IE   | Edge  | Safari |
+| :---:  | :-----: | :---: | :---: | :----: |
+|  49+   |   31+   |   -   |  16+  |  9.1+  |
+
+[CSS Variables](https://caniuse.com/#search=css%20var)  

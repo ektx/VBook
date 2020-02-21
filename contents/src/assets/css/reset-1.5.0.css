@@ -60,7 +60,7 @@ ul { list-style: none; }
  */
  code, kbd, pre, samp, tt { 
 	font-size: 1em; /* 1 */
-	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace; /* 2 */
+	font-family: source-code-pro,Menlo,Monaco,Consolas,Courier New,monospace; /* 2 */
 } /* 统一等宽字体 */
 
 /**

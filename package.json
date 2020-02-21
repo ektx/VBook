@@ -1,6 +1,7 @@
 {
   "name": "@ektx/v-book",
-  "version": "0.7.0",
+  "description": "Make Vue Demo Easy!!",
+  "version": "0.7.1",
   "bin": {
     "vbook": "index.js"
   },
@@ -34,7 +35,8 @@
     "vue-template-compiler": "^2.6.10"
   },
   "alias": {
-    "vue": "./node_modules/vue/dist/vue.js"
+    "vue": "./node_modules/vue/dist/vue.js",
+    "root": "./MY_COMPONENTS/"
   },
   "staticFiles": {
     "staticPath": [
@@ -42,7 +44,6 @@
     ]
   },
   "license": "MIT",
-  "description": "Make Vue Demo Easy!!",
   "devDependencies": {
     "jest": "^25.1.0"
   }

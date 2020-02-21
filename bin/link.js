@@ -96,9 +96,16 @@ function createIndexFile (name) {
   })
 }
 
+
+function createEnhance () {
+  return new Promise((resolve, reject) => {
+    let file = path.join(process.cwd(), '.vbook/enhance.js')
+  })
+}
+
 /**
  * @param {string} name 项目文件名
- * @param {string} docRoot 组件项目地址
+ * @param {string} docRoot .vbook生成的组件项目地址
  */
 async function init (name, docRoot) {
   let execaArgs = await useTaoBaoURL()
@@ -108,6 +115,11 @@ async function init (name, docRoot) {
   let mainFrom = path.join(process.cwd(), './index.js')
   let mainLink = path.join(docRoot, './index.js')
   createLink(mainFrom, mainLink)
+
+  // 创建引用文件
+  let libEnhance = path.join(process.cwd(), '.vbook/enhance.js')
+  let vbookEnhance = path.join(docRoot, './enhance.js')
+  createLink(libEnhance, vbookEnhance)
 
   console.log('⚙️  初始化中！Init Starting...')
 
@@ -125,11 +137,11 @@ async function init (name, docRoot) {
 
   /** Public Path */ 
   let vbookPublic = path.join(__dirname, '../contents/public')
-  let uiPublic = path.join(process.cwd(), '.vbook/public')
+  // let uiPublic = path.join(process.cwd(), '.vbook/public')
   let homePublic = path.join(docRoot, 'public')
 
   fs.copySync(vbookPublic, homePublic)
-  createLink(homePublic, uiPublic)
+  // createLink(homePublic, uiPublic)
 
   let postcssFrom = path.join(__dirname, '../postcss.config.js')
   let postcssLink = path.join(docRoot, './postcss.config.js')
@@ -153,7 +165,7 @@ async function init (name, docRoot) {
   let uiSrc = path.join(process.cwd(), '.vbook/src')
 
   fs.copySync(vbookSrc, homeSrc)
-  createLink(homeSrc, uiSrc)
+  // createLink(homeSrc, uiSrc)
   
   // 安装包依赖
   console.log('🚚 处理相关依赖...')
