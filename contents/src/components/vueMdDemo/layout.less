@@ -80,7 +80,11 @@ h1, h2, h3, h4, h5, h6, strong {
   }
 
   a {
-      color: #42b983;
+    color: #42b983;
+
+    &:hover {
+      border-bottom: 1px solid currentColor;
+    }
   }
 
   & > table {
@@ -178,7 +182,12 @@ h1, h2, h3, h4, h5, h6, strong {
   }
 
   code {
-    color: #FF5722;
+    color: #d63200;
+    padding: 2px 5px;
+    margin: 0 2px;
+    border-radius: 2px;
+    white-space: nowrap;
+    background-color: #f8f8f8;
   }
 
   pre {
