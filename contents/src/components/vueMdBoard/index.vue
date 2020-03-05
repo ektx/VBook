@@ -169,6 +169,8 @@ export default {
             transition: height .35s ease-in-out;
 
             pre, code {
+                margin: 0;
+                border-radius: 0;
                 background: transparent;
             }
         }

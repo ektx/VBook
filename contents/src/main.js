@@ -2,7 +2,6 @@ import Vue from 'vue'
 import axios from 'axios'
 import App from './App.vue'
 import router from './router/'
-import 'highlight.js/styles/vs.css'
 import enhance from '../enhance.js'
 
 Vue.prototype.$axios = axios

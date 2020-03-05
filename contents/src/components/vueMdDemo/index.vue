@@ -1,6 +1,6 @@
 <script>
 import mkIt from "markdown-it";
-import hljs from "highlight.js";
+import Prism from "prismjs"
 import mkItContainer from "markdown-it-container";
 import mkItSub from "markdown-it-sub";
 import mkItSup from "markdown-it-sup";
@@ -9,6 +9,7 @@ import mkItToc from "./md-toc.js";
 import mkItVue from "./md-vue.js";
 import demo from "../vueMdBoard";
 import demoTheme from "../vueMdTheme";
+import 'prismjs/themes/prism.css'
 
 export default {
   name: "v-markdown-it",
@@ -28,14 +29,14 @@ export default {
       html: true,
       typographer: true,
       highlight(str, lang) {
-        if (lang && hljs.getLanguage(lang)) {
+        if (lang) {
           try {
-            let code = hljs.highlight(lang, str, true).value
+            let code = Prism.highlight(str, Prism.languages[lang], lang)
 
-            code = code.replace(/<span class="hljs-symbol">&amp;#123;/g, '<span>{')
+            code = code.replace(/<[^>]+>&amp;#123;/g, '<span>{')
 
             return (
-              `<pre class="hljs"><code>` +
+              `<pre class="language-${lang}"><code>` +
               code +
               "</code></pre>"
             );
