@@ -40,17 +40,23 @@ vbook -h
 ### 项目结构
 
 ```
- your_project
-  ├─- doc      文档存放地址
-  |  ├─- readme.md markdown文档，这里只列一个
-  |  ├─- index.js  vbook 展示控制文件
-  ├─- src      项目文档，如果需要定置，修改此处
-  |  ├─- index.js  组件库主入口
-  |  ├─- styles    组件库样式文件夹
-  |     ├─- index.less 样式文件主入口，支持index.sass
+ Project
+  ├─── doc （示例）markdown示例文档目录
+  │  ├─── readme.md （可选）markdown文档，这里只列一个
+  │  ├─── index.js  （必须 自动）vbook 展示控制文件
+  |  ├─── .vbook    （必须 自动）功能扩展目录
+  |     ├─── enhance.js  (可选)自定义组件库引用与第三方组件库扩展
+  ├─── src          （示例）组件库位置，可以自定义位置
+  │  ├─── index.js  （示例）组件库主入口
+  │  ├─── styles    （示例）组件库样式文件夹
+  │     ├─── index.less （示例）样式文件主入口，支持index.sass
 ```
 
-> 目前暂不支持修改主件库的位置及组件库样式的引用位置。
+说明：  
+- **示例**：例子，用户可以自定义文件（夹）位置与名称
+- **可选**：非必须文件，用户可以删除或自己创建类似文件
+- **必须**：vbook运行必须文件，不可删除
+- **自动**：vbook运行或初始化会自动生成
 
 
 ### index.js 规则
@@ -65,11 +71,10 @@ export default {
   aside: [
     {
       label: '使用指南',
-      // doc 中的文件位置
-      file: 'readme',
       children: [
         {
           label: '使用指南',
+          // doc/readme.md
           file: 'readme'
         }
       ]
@@ -77,6 +82,26 @@ export default {
   ]
 }
 ```
+
+### enhance.js
+
+`enhance.js` 用于添加自己的组件库或引用第三方组件（库）。
+
+```js
+// root/index => Project/src/index.js
+import VC from 'root/index';
+import ElementUI from 'element-ui';
+
+import 'root/styles/index.less'
+import 'element-ui/lib/theme-chalk/index.css';
+
+export default (Vue) => {
+  Vue.use(VC)
+  Vue.use(ElementUI)
+}
+```
+
+> **root** 为 **Project/src** 目录
 
 ## 兼容性
 

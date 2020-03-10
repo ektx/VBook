@@ -3,7 +3,7 @@
 const program = require('commander')
 const path = require('path')
 const package = require('./package.json')
-const main = require('./bin/main')
+const run = require('./bin/main')
 const link = require('./bin/link')
 const build = require('./bin/build')
 const generateDoc = require('./bin/generateDoc')
@@ -44,7 +44,7 @@ program
       cmd.port = 8888
     }
 
-    main({...cmd, appName, version})
+    run({...cmd, appName, version})
   })
 
 program
