@@ -148,6 +148,7 @@ export default {
 }
 </script>
 
+
 <style lang="less">
 .demo-com {
     margin: 2em 0;
@@ -172,6 +173,10 @@ export default {
                 margin: 0;
                 border-radius: 0;
                 background: transparent;
+            }
+
+            p {
+                color: #333;
             }
         }
 

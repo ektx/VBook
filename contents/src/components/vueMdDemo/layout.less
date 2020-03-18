@@ -1,30 +1,44 @@
-h1, h2, h3, h4, h5, h6, strong {
-  .markdown-it-com > & {
-    margin-top: 1em;
-    color: var(--gray10);
-    font-weight: 600;
-  }
-}
 .markdown-it-com {
   max-width: 900px;
-
+  
   @media screen {
     @media (min-width: 1500px) {
       margin: 0 auto;
     }
+  }
+  
+  h1, h2, h3, h4, h5, h6, strong {
+    margin-top: 1em;
+    color: var(--gray10);
+    font-weight: 600;
+    transition: 
+      color .4s ease-in-out, 
+      border-color .4s ease-in-out;
+
+    .DARK_headerColor {
+      border-color: var(--gray60)
+    }
+
+    .dark-scheme & {
+      .DARK_headerColor
+    }
+    @media (prefers-color-scheme: dark) {
+      .DARK_headerColor
+    }
+
   }
 
   & > h1 {
     margin-block-end: 15px;
     padding-block-end: 10px;
     font-size: 32px;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid var(--gray90);
   }
   & > h2 {
     margin-block-end: 15px;
     padding-block-end: 8px;
     font-size: 28px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--gray90);
   }
   & > h3 {
     font-size: 24px;
@@ -44,13 +58,14 @@ h1, h2, h3, h4, h5, h6, strong {
   hr {
     margin: 20px 0;
     border: none;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--gray90);
   }
 
   p {
     font-size: 14px;
     line-height: 28px;
     color: var(--gray10);
+    transition: color .4s ease-in-out;
   }
 
   & > ul {
@@ -100,7 +115,21 @@ h1, h2, h3, h4, h5, h6, strong {
           font-size: 16px;
           text-align: left;
           vertical-align: bottom;
-          border-bottom: 2px solid #ddd;
+          border-bottom: 2px solid var(--gray95);
+          transition: 
+            background-color .4s ease-in-out,
+            border-color .4s ease-in-out;
+
+          .DARK_th {
+            border-bottom-color: var(--gray60);
+          }
+
+          .dark-scheme & {
+            .DARK_th
+          }
+          @media (prefers-color-scheme: dark) {
+            .DARK_th
+          }
         }
       }
     }
@@ -111,10 +140,10 @@ h1, h2, h3, h4, h5, h6, strong {
           font-size: 14px;
           line-height: 1.4;
           vertical-align: top;
-          border-bottom: 1px solid var(--gray90);
+          border-bottom: 1px solid var(--gray95);
           transition: 
-          background-color .4s ease-in-out,
-          border-color .4s ease-in-out;
+            background-color .4s ease-in-out,
+            border-color .4s ease-in-out;
 
           .DARK_td {
             border-bottom-color: var(--gray75);
@@ -130,7 +159,7 @@ h1, h2, h3, h4, h5, h6, strong {
         }
         &:nth-child(2n) {
           td {
-            background-color: var(--gray90);
+            background-color: var(--gray95);
 
             .DARK_td2n {
               background-color: var(--gray75);
@@ -187,7 +216,8 @@ h1, h2, h3, h4, h5, h6, strong {
     margin: 0 2px;
     border-radius: 2px;
     white-space: nowrap;
-    background-color: #f8f8f8;
+    background-color: var(--gray90);
+    transition: background .4s ease-in-out;
   }
 
   pre {
