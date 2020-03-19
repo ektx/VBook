@@ -1,7 +1,7 @@
 {
   "name": "@ektx/v-book",
   "description": "Make Vue Demo Easy!!",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "bin": {
     "vbook": "index.js"
   },

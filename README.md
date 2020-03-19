@@ -103,6 +103,50 @@ export default (Vue) => {
 
 > **root** 为 **Project/src** 目录
 
+
+
+## 🚧 文档自动化
+
+> 此功能为测试功能
+
+### 操作
+
+`vbook doc` 功能可以将当前工作目录以列表的方式列出，具体操作如下：
+
+- **上下键** 来选择文件
+- **Tab键** 进入文件夹
+- **Enter** 来确认选择的 vue 文件
+  
+最终，终端会以 markdown 格式输出生成后的文档内容。
+
+`ctrl + C` 退出生成功能。
+
+### vue文件格式
+
+对Props进行注释：
+
+```js
+export default {
+  props: {
+    // 我是单行注释
+    name: {
+      type: String,
+      default: ''
+    }
+  }
+}
+```
+
+输出：
+
+```
+# Props
+
+| 参数 | 类型 | 说明 | 默认值 | 可选值 |
+| --- | --- | --- | --- | --- |
+| **name** | `String` | 我是单行注释 |  |  |
+```
+
 ## 兼容性
 
 | Chrome | Firefox |  IE   | Edge  | Safari |
