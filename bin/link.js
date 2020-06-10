@@ -96,11 +96,23 @@ function createIndexFile (name) {
   })
 }
 
-
+/**
+ * 创建用户组件配制文件
+ */
 function createEnhance () {
-  return new Promise((resolve, reject) => {
-    let file = path.join(process.cwd(), '.vbook/enhance.js')
-  })
+  let file = path.join(process.cwd(), '.vbook/enhance.js')
+  let data = `// 在此添加你的组件地址或第三方组件库
+// 例如： root/index => Project/src/index.js
+// import VC from 'root/index';
+
+// 引入样式：import 'root/styles/index.less'
+
+export default (Vue) => {
+  // 使用：Vue.use(VC)
+}    
+    `
+  fs.writeFileSync(file, data, { encoding: 'utf8' })
+
 }
 
 /**
@@ -117,6 +129,7 @@ async function init (name, docRoot) {
   createLink(mainFrom, mainLink)
 
   // 创建引用文件
+  createEnhance()
   let libEnhance = path.join(process.cwd(), '.vbook/enhance.js')
   let vbookEnhance = path.join(docRoot, './enhance.js')
   createLink(libEnhance, vbookEnhance)

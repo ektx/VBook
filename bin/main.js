@@ -108,7 +108,7 @@ Server Running at:
  */
 function updateBridge (address) {
 	let enhanceFile = path.join(address, 'enhance.js')
-	let warnInfo = '// ⚠️请不要修改此文件'
+	let warnInfo = '// ⚠️ 请不要修改此文件'
 	let noEnhance = `export default () => {}`
 	let hasEnhance = `
 import enhance from '../enhance.js'
