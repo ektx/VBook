@@ -62,8 +62,11 @@ export default {
       this.inner = "";
 
       this.$axios({
-        url: `${file}.md`,
-        method: "GET"
+        url: "/api/getFile",
+        method: "POST",
+        data: {
+          path: `${file}.md`
+        }
       }).then(res => {
         this.inner = this.safeStr(res.data);
       });
