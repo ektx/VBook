@@ -1,55 +1,57 @@
 const Bundler = require('parcel-bundler')
 const path = require('path')
 const app = require('express')()
+const bodyParser = require('body-parser')
 const fs = require('fs')
 const mime = require('mime')
 const { getIPs } = require('./getIPs')
 const homedir = require('os').homedir()
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 /**
  * @param {string} appName 组件库名称
  * @param {object} opts 配制信息
  */
 module.exports = async function ({appName, ...opts}) {
-	const appPath = path.join(homedir, `.vbook/${appName}`)
-	// 入口文件地址
-	const entryFiles = path.join(appPath, 'public/index.html')
+  const appPath = path.join(homedir, `.vbook/${appName}`)
+  // 入口文件地址
+  const entryFiles = path.join(appPath, 'public/index.html')
 
-	updateBridge(appPath)
+  updateBridge(appPath)
 
-	let servered = false
-	const options = {
-		outDir: path.join(appPath, 'dist'),
-		outFile: 'index.html',
-		cacheDir: path.join(appPath, 'cache'),
-		// hmr: false,
-		// target: 'node',
-		// watch: false,
-		// cache: false
-		// publicUrl: './',
-		// detailedReport: true
-	}
+  let servered = false
+  const options = {
+    outDir: path.join(appPath, 'dist'),
+    outFile: 'index.html',
+    cacheDir: path.join(appPath, 'cache'),
+    // hmr: false,
+    // target: 'node',
+    // watch: false,
+    // cache: false
+    // publicUrl: './',
+    // detailedReport: true
+  }
 
-	const bundler = new Bundler(entryFiles, options)
+  const bundler = new Bundler(entryFiles, options)
 
-	app.get('*', function (req, res, next){
-		if (req.path.endsWith('.md')) {
-			req.$file = req.path
-			streamEvt(req, res)
-		}
-		else {
-			next()
-		}
-	})
+  app.get('*', function (req, res, next){
+    next()
+  })
+  app.post('/api/getFile', streamEvt)
 
-	app.use(bundler.middleware())
+  app.use(bundler.middleware())
 
-	bundler.on('bundled', () => {
-		if (servered) return
+  bundler.on('bundled', () => {
+    if (servered) return
 
-		servered = true
-		startServe(app, opts.port)
-	})
+    servered = true
+    startServe(app, opts.port)
+  })
 }
 
 /**
@@ -58,28 +60,32 @@ module.exports = async function ({appName, ...opts}) {
  * @param {res} res 
  */
 function streamEvt (req, res) {
-	console.log(req.$file)
-	let file = ''
+  let file = ''
+  let filePath = req.body.path
 
-	if (req.$file.includes('$$/')) {
-		file = path.join(__dirname, '../doc', req.$file.replace('$$/', ''))
-	} else {
-		file = path.join(process.cwd(), req.$file)
-	}
-	console.log('GET', path.basename(file), file)
+  // 使以 $$ 开头请求的文件，从服务器的目录中查寻
+  // eg: $$/help/welcome.md => ../doc/help/welcome.md
+  if (req.body.path.includes('$$/')) {
+    file = path.join(__dirname, '../doc', filePath.replace('$$/', ''))
+  } 
+  // 其它的文件都从用户的目录中查寻
+  else {
+    file = path.join(process.cwd(), filePath)
+  }
+  console.log('🔍', path.basename(file), file)
 
-	// 从用户自己的目录查找文件
-	fs.access(file, err => {
-		if (err) {
-			res.send(`:::error\n文件并不存在! ${file} \n:::`)
-			return
-		}
+  // 从用户自己的目录查找文件
+  fs.access(file, err => {
+    if (err) {
+      res.send(`:::error\n文件并不存在! ${file} \n:::`)
+      return
+    }
 
-		let stream = fs.createReadStream(file, {encoding: 'utf8'})
-		
-		res.setHeader('Content-Type', mime.getType(file))
-		stream.pipe(res)
-	})
+    let stream = fs.createReadStream(file, {encoding: 'utf8'})
+    
+    res.setHeader('Content-Type', mime.getType(file))
+    stream.pipe(res)
+  })
 }
 
 /**
@@ -88,10 +94,10 @@ function streamEvt (req, res) {
  * @param {Number} port 端口
  */
 function startServe (app, port) {
-	app.listen(port, async () => {
-		let {IPv4} = await getIPs()
+  app.listen(port, async () => {
+    let {IPv4} = await getIPs()
 
-		console.log(`
+    console.log(`
 Server Running at:
 
 - Local:   http://localhost:${port}/
@@ -99,7 +105,7 @@ Server Running at:
 
 * Ctrl + C : Stop the server, more infomation vist https://github.com/ektx/VBook
 `)
-	})
+  })
 }
 
 /**
@@ -107,25 +113,25 @@ Server Running at:
  * @param {string} address 组件库地址
  */
 function updateBridge (address) {
-	let enhanceFile = path.join(address, 'enhance.js')
-	let warnInfo = '// ⚠️ 请不要修改此文件'
-	let noEnhance = `export default () => {}`
-	let hasEnhance = `
+  let enhanceFile = path.join(address, 'enhance.js')
+  let warnInfo = '// ⚠️ 请不要修改此文件'
+  let noEnhance = `export default () => {}`
+  let hasEnhance = `
 import enhance from '../enhance.js'
 
 export default ({Vue}) => {
-	enhance(Vue)
+  enhance(Vue)
 }`
 
-	if (fs.existsSync(enhanceFile)) {
-		warnInfo += hasEnhance
-	} else {
-		warnInfo += noEnhance
-	}
+  if (fs.existsSync(enhanceFile)) {
+    warnInfo += hasEnhance
+  } else {
+    warnInfo += noEnhance
+  }
 
-	fs.writeFileSync(
-		path.join(address, 'src/bridge.js'),
-		warnInfo, 
-		{encoding: 'utf8'}
-	)
+  fs.writeFileSync(
+    path.join(address, 'src/bridge.js'),
+    warnInfo, 
+    {encoding: 'utf8'}
+  )
 }

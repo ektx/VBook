@@ -43,13 +43,14 @@ vbook -h
  Project
   ├─── doc （示例）markdown示例文档目录
   │  ├─── readme.md （可选）markdown文档，这里只列一个
-  │  ├─── index.js  （必须 自动）vbook 展示控制文件
+  │  ├─── index.js  （必须 自动）vbook 目录展示控制文件
   |  ├─── .vbook    （必须 自动）功能扩展目录
   |     ├─── enhance.js  (可选)自定义组件库引用与第三方组件库扩展
   ├─── src          （示例）组件库位置，可以自定义位置
   │  ├─── index.js  （示例）组件库主入口
   │  ├─── styles    （示例）组件库样式文件夹
   │     ├─── index.less （示例）样式文件主入口，支持index.sass
+  ├─── readme.md
 ```
 
 说明：  
@@ -59,7 +60,9 @@ vbook -h
 - **自动**：vbook运行或初始化会自动生成
 
 
-### index.js 规则
+### 目录配制规则
+
+目录文件为 `index.js`, 它应该保存在你的 doc 文件目录下。通常在初始化时，会自动算成
 
 ```js
 export default {
@@ -82,6 +85,12 @@ export default {
   ]
 }
 ```
+
+file 的配制有以下几种：
+
+- $$/help/welcome  访问 vbook中预留在 doc/help下的文件
+- abc/readme       访问你的 doc/abc/readme.md
+- ../readme        访问你的 doc 上级目录中的 readme.md(project/readme.md)
 
 ### enhance.js
 
