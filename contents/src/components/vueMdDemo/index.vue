@@ -35,19 +35,11 @@ export default {
 
             code = code.replace(/<[^>]+>&amp;#123;/g, '<span>{')
 
-            return (
-              `<pre class="language-${lang}"><code>` +
-              code +
-              "</code></pre>"
-            );
+            return `<pre class="language-${lang}"><code>${code}</code></pre>`
           } catch (__) {}
         }
 
-        return (
-          '<pre class="hljs"><code>' +
-          md.utils.escapeHtml(str) +
-          "</code></pre>"
-        );
+        return `<pre class="hljs"><code>${md.utils.escapeHtml(str)}</code></pre>`
       }
     })
       .use(mkItVue)
